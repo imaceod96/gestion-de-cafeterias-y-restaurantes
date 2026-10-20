@@ -1,6 +1,6 @@
 import { Category } from "../../domain/entities/category";
 import { CategoryRepository } from "../../application/ports/product.repository";
-import { ID } from "../../../shared/types";
+import { ID } from "../../../../shared/types";
 
 export class HttpCategoryRepository implements CategoryRepository {
   private baseUrl = "/api/categories";

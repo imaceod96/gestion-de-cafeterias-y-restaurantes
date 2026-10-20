@@ -1,6 +1,6 @@
 import { InventoryMovement } from "../../domain/entities/inventory-movement";
 import { InventoryMovementRepository } from "../../application/ports/inventory-movement.repository";
-import { ID } from "../../../shared/types";
+import { ID } from "../../../../shared/types";
 
 export class HttpInventoryMovementRepository implements InventoryMovementRepository {
   async findAll(productId?: ID): Promise<InventoryMovement[]> {

@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
-import { cn } from "../../lib/utils";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Badge } from "../ui/badge";
+import { cn } from "@/shared/lib/utils";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Badge } from "@/shared/ui/badge";
 import { CheckCircle2 } from "lucide-react";
 
 type ModulePlaceholderProps = {

@@ -1,5 +1,5 @@
-import { EntityId, Timestamp, Price, StockQuantity, Percentage } from "../../../shared/domain/value-objects";
-import { ID, Unit, PriceType } from "../../../shared/types";
+import { EntityId, Timestamp, Price, StockQuantity, Percentage } from "../../../../shared/domain/value-objects";
+import { ID, Unit, PriceType } from "../../../../shared/types";
 
 export interface ProductData {
   id: ID;

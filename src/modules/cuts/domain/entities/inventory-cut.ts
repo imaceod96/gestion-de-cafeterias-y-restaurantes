@@ -1,5 +1,5 @@
-import { EntityId, Timestamp, Price } from "../../../shared/domain/value-objects";
-import { ID, CutStatus } from "../../../shared/types";
+import { EntityId, Timestamp, Price } from "../../../../shared/domain/value-objects";
+import { ID, CutStatus } from "../../../../shared/types";
 
 export interface CutDetailData {
   id: ID;

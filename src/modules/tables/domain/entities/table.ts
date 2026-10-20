@@ -1,5 +1,5 @@
-import { EntityId, Timestamp } from "../../../shared/domain/value-objects";
-import { ID, TableStatus } from "../../../shared/types";
+import { EntityId, Timestamp } from "../../../../shared/domain/value-objects";
+import { ID, TableStatus } from "../../../../shared/types";
 
 export interface TableData {
   id: ID;

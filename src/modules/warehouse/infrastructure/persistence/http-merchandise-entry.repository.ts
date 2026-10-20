@@ -1,6 +1,6 @@
 import { MerchandiseEntry } from "../../domain/entities/merchandise-entry";
 import { MerchandiseEntryRepository } from "../../application/ports/merchandise-entry.repository";
-import { ID } from "../../../shared/types";
+import { ID } from "../../../../shared/types";
 
 export class HttpMerchandiseEntryRepository implements MerchandiseEntryRepository {
   private baseUrl = "/api/merchandise-entries";

@@ -1,5 +1,5 @@
-import { EntityId, Timestamp, Price } from "../../../shared/domain/value-objects";
-import { ID, VoucherStatus } from "../../../shared/types";
+import { EntityId, Timestamp, Price } from "../../../../shared/domain/value-objects";
+import { ID, VoucherStatus } from "../../../../shared/types";
 
 export interface VoucherData {
   id: ID;

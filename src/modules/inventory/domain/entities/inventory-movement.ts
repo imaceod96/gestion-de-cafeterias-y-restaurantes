@@ -1,5 +1,5 @@
-import { EntityId, Timestamp } from "../../../shared/domain/value-objects";
-import { ID, InventoryMovementType } from "../../../shared/types";
+import { EntityId, Timestamp } from "../../../../shared/domain/value-objects";
+import { ID, InventoryMovementType } from "../../../../shared/types";
 
 export interface InventoryMovementData {
   id: ID;

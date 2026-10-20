@@ -1,6 +1,6 @@
 import { Product } from "../../domain/entities/product";
 import { ProductRepository } from "../../application/ports/product.repository";
-import { ID } from "../../../shared/types";
+import { ID } from "../../../../shared/types";
 
 export class HttpProductRepository implements ProductRepository {
   private baseUrl = "/api/products";

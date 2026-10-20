@@ -1,5 +1,5 @@
-import { EntityId, Timestamp } from "../../../shared/domain/value-objects";
-import { ID } from "../../../shared/types";
+import { EntityId, Timestamp } from "../../../../shared/domain/value-objects";
+import { ID } from "../../../../shared/types";
 
 export interface CategoryData {
   id: ID;

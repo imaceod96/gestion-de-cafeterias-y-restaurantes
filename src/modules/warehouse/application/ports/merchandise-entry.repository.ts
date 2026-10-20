@@ -1,5 +1,5 @@
 import { MerchandiseEntry } from "../../domain/entities/merchandise-entry";
-import { ID } from "../../../shared/types";
+import { ID } from "../../../../shared/types";
 
 export interface MerchandiseEntryRepository {
   findAll(productId?: ID): Promise<MerchandiseEntry[]>;

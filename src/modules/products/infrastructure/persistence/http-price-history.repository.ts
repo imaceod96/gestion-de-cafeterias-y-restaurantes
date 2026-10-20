@@ -1,6 +1,6 @@
 import { PriceHistory } from "../../domain/entities/price-history";
 import { PriceHistoryRepository } from "../../application/ports/price-history.repository";
-import { ID } from "../../../shared/types";
+import { ID } from "../../../../shared/types";
 
 export class HttpPriceHistoryRepository implements PriceHistoryRepository {
   async findByProduct(productId: ID): Promise<PriceHistory[]> {
