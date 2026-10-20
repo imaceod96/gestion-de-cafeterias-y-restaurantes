@@ -5,9 +5,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppLayout } from "@/shared/ui/layout/AppLayout";
 import Index from "@/app/pages/Index";
-import NotFound from "@/app/pages/NotFound";
-import ProductsPage from "@/modules/products/presentation/pages/ProductsPage";
-import IngresarMercanciaPage from "@/modules/warehouse/presentation/pages/IngresarMercanciaPage";
+import { NotFound } from "@/app/pages/NotFound";
+import { ProductsPage } from "@/modules/products/presentation/pages/ProductsPage";
+import { IngresarMercanciaPage } from "@/modules/warehouse/presentation/pages/IngresarMercanciaPage";
 import { ExistenciaActualPage } from "@/modules/inventory/presentation/pages/ExistenciaActualPage";
 
 const queryClient = new QueryClient();
