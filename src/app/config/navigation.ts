@@ -2,6 +2,7 @@ import {
   Boxes,
   ClipboardList,
   Coffee,
+  History,
   LayoutGrid,
   PackagePlus,
   Receipt,
@@ -89,6 +90,63 @@ export const administrativeNavigation = [
         description: "Conteos físicos y diferencias",
         to: "/cortes",
         icon: ScanLine,
+      },
+    ],
+  },
+];
+
+/**
+ * Sales navigation — for sales operations and history.
+ */
+export const salesNavigation = [
+  {
+    key: "ventas",
+    label: "VALES",
+    icon: Receipt,
+    items: [
+      {
+        label: "Crear vale",
+        description: "Venta inmediata",
+        to: "/ventas/vale",
+        icon: Receipt,
+      },
+    ],
+  },
+  {
+    key: "mesas-section",
+    label: "MESAS",
+    icon: UtensilsCrossed,
+    items: [
+      {
+        label: "Mesas abiertas",
+        description: "Cuentas activas",
+        to: "/mesas",
+        icon: UtensilsCrossed,
+      },
+    ],
+  },
+];
+
+/**
+ * History navigation — for historical records.
+ */
+export const historyNavigation = [
+  {
+    key: "historial",
+    label: "HISTORIAL",
+    icon: History,
+    items: [
+      {
+        label: "Vales",
+        description: "Historial de vales cerrados",
+        to: "/historial/vales",
+        icon: Receipt,
+      },
+      {
+        label: "Mesas",
+        description: "Historial de mesas cerradas",
+        to: "/historial/mesas",
+        icon: UtensilsCrossed,
       },
     ],
   },

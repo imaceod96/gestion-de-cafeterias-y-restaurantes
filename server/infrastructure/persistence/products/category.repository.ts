@@ -6,12 +6,13 @@ import { ID } from "@/shared/types";
 export class SqliteCategoryRepository implements CategoryRepository {
   async findAll(): Promise<Category[]> {
     const db = getDatabase();
-    const rows = db.prepare("SELECT * FROM categories ORDER BY name").all() as any[];
+    const rows = db.prepare("SELECT * FROM categories WHERE is_active = 1 ORDER BY name").all() as any[];
     return rows.map((row) =>
       Category.fromData({
         id: row.id,
         name: row.name,
         description: row.description,
+        isActive: Boolean(row.is_active),
         createdAt: row.created_at,
         updatedAt: row.updated_at,
       })
@@ -26,6 +27,7 @@ export class SqliteCategoryRepository implements CategoryRepository {
       id: row.id,
       name: row.name,
       description: row.description,
+      isActive: Boolean(row.is_active),
       createdAt: row.created_at,
       updatedAt: row.updated_at,
     });
@@ -35,16 +37,18 @@ export class SqliteCategoryRepository implements CategoryRepository {
     const db = getDatabase();
     const data = category.toData();
     db.prepare(
-      `INSERT INTO categories (id, name, description, created_at, updated_at)
-       VALUES (@id, @name, @description, @createdAt, @updatedAt)
+      `INSERT INTO categories (id, name, description, is_active, created_at, updated_at)
+       VALUES (@id, @name, @description, @isActive, @createdAt, @updatedAt)
        ON CONFLICT(id) DO UPDATE SET
          name = @name,
          description = @description,
+         is_active = @isActive,
          updated_at = @updatedAt`
     ).run({
       id: data.id,
       name: data.name,
       description: data.description,
+      isActive: data.isActive ? 1 : 0,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
     });

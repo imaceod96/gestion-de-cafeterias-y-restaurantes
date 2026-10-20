@@ -1,5 +1,5 @@
-import { APP_NAME, APP_TAGLINE, primaryActions, administrativeNavigation } from "@/app/config/navigation";
-import { Coffee, Receipt, UtensilsCrossed, Warehouse, Boxes, PackagePlus, ScanLine, ClipboardList, LayoutGrid } from "lucide-react";
+import { APP_NAME, APP_TAGLINE, primaryActions, administrativeNavigation, salesNavigation, historyNavigation } from "@/app/config/navigation";
+import { Coffee, Receipt, UtensilsCrossed, Warehouse, Boxes, PackagePlus, ScanLine, ClipboardList, LayoutGrid, History } from "lucide-react";
 import { NavDropdown } from "@/shared/ui/navigation/NavDropdown";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
@@ -17,7 +17,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 <p className="text-sm text-coffee-600">{APP_TAGLINE}</p>
               </div>
             </div>
-            
+
             <nav className="hidden md:flex items-center space-x-6">
               {primaryActions.map((action) => {
                 const Icon = action.icon;
@@ -32,29 +32,47 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                   </a>
                 );
               })}
-              
+
               <NavDropdown
                 label="ALMACÉN"
                 icon={Warehouse}
                 items={administrativeNavigation[0].items}
               />
-              
+
               <NavDropdown
                 label="CATÁLOGO"
                 icon={Coffee}
                 items={administrativeNavigation[1].items}
               />
-              
+
               <NavDropdown
                 label="CORTES"
                 icon={LayoutGrid}
                 items={administrativeNavigation[2].items}
               />
+
+              <NavDropdown
+                label="VALES"
+                icon={Receipt}
+                items={salesNavigation[0].items}
+              />
+
+              <NavDropdown
+                label="MESAS"
+                icon={UtensilsCrossed}
+                items={salesNavigation[1].items}
+              />
+
+              <NavDropdown
+                label="HISTORIAL"
+                icon={History}
+                items={historyNavigation[0].items}
+              />
             </nav>
           </div>
         </div>
       </header>
-      
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {children}
       </main>

@@ -15,7 +15,7 @@ export type TableStatus = "libre" | "abierta";
 
 export type PriceType = "compra" | "venta";
 
-export type Unit = "unidad" | "libra" | "kilogramo" | "caja" | "botella" | "paquete";
+export type Unit = string;
 
 export type CutStatus = "pendiente" | "completado";
 

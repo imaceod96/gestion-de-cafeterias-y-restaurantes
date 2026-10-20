@@ -5,6 +5,9 @@ import { ID } from "../../../../shared/types";
 export type StockItem = {
   productId: ID;
   productName: string;
+  unit: string;
+  categoryId: ID;
+  categoryName: string | null;
   currentStock: number;
   reservedStock: number;
   availableStock: number;
@@ -40,19 +43,22 @@ export const getCurrentStock = async (
     }
 
     const items: StockItem[] = products.map((p) => {
-      const productId = p.id.toString();
-      const currentStock = stockByProduct.get(productId) ?? p.currentStock.toNumber();
-      const minStock = p.minStock.toNumber();
-      return {
-        productId,
-        productName: p.name,
-        currentStock,
-        reservedStock: 0, // TODO: implement reservations
-        availableStock: Math.max(0, currentStock),
-        minStock,
-        isLowStock: currentStock <= minStock,
-      };
-    });
+          const productId = p.id.toString();
+          const currentStock = stockByProduct.get(productId) ?? p.currentStock.toNumber();
+          const minStock = p.minStock.toNumber();
+          return {
+            productId,
+            productName: p.name,
+            unit: p.unit,
+            categoryId: p.categoryId.toString(),
+            categoryName: null, // Will be populated by the page if needed
+            currentStock,
+            reservedStock: 0, // TODO: implement reservations
+            availableStock: Math.max(0, currentStock),
+            minStock,
+            isLowStock: currentStock <= minStock,
+          };
+        });
 
     return { items, total: items.length, success: true };
   } catch (error: any) {

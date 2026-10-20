@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { PageHeader } from "@/shared/ui/layout/PageHeader";
-import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { Badge } from "@/shared/ui/badge";
 import {
@@ -19,7 +18,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/ui/select";
-import { Label } from "@/shared/ui/label";
 import { Search, Boxes, AlertTriangle, Package } from "lucide-react";
 import { createDeps } from "@/app/providers/composition-root";
 import { getCurrentStock } from "@/modules/inventory/application/queries/get-current-stock.query";
@@ -50,11 +48,21 @@ export function ExistenciaActualPage() {
   const items = stockData?.items ?? [];
   const categories = categoriesData?.categories ?? [];
 
-  const filteredItems = items.filter((item) => {
+  const categoryNameById = new Map(
+    categories.map((c: Category) => [c.id.toString(), c.name])
+  );
+
+  const enrichedItems = items.map((item) => ({
+    ...item,
+    categoryName: categoryNameById.get(item.categoryId) ?? null,
+  }));
+
+  const filteredItems = enrichedItems.filter((item) => {
     const matchesSearch = item.productName
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
-    const matchesCategory = categoryFilter === "all" || true; // Category filter would need product-category mapping
+    const matchesCategory =
+      categoryFilter === "all" || item.categoryId === categoryFilter;
     const matchesStock =
       stockFilter === "all" ||
       (stockFilter === "low" && item.isLowStock) ||
@@ -92,6 +100,19 @@ export function ExistenciaActualPage() {
           />
         </div>
         <div className="flex gap-2">
+          <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+            <SelectTrigger className="w-48 border-coffee-200">
+              <SelectValue placeholder="Filtrar categoría" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todas las categorías</SelectItem>
+              {categories.map((cat: Category) => (
+                <SelectItem key={cat.id.toString()} value={cat.id.toString()}>
+                  {cat.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Select value={stockFilter} onValueChange={setStockFilter}>
             <SelectTrigger className="w-40 border-coffee-200">
               <SelectValue placeholder="Filtrar stock" />
@@ -122,12 +143,14 @@ export function ExistenciaActualPage() {
                 <TableHead className="text-right">Reservado</TableHead>
                 <TableHead className="text-right">Disponible</TableHead>
                 <TableHead className="text-center">Estado</TableHead>
+                <TableHead className="text-center">Unidad</TableHead>
+                <TableHead className="text-center">Categoría</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredItems.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8 text-coffee-500">
+                  <TableCell colSpan={8} className="text-center py-8 text-coffee-500">
                     <Boxes className="h-8 w-8 mx-auto mb-2 opacity-50" />
                     No se encontraron productos
                   </TableCell>
@@ -171,6 +194,12 @@ export function ExistenciaActualPage() {
                           OK
                         </Badge>
                       )}
+                    </TableCell>
+                    <TableCell className="text-center text-coffee-700">
+                      {item.unit}
+                    </TableCell>
+                    <TableCell className="text-center text-coffee-700">
+                      {item.categoryName || "Sin categoría"}
                     </TableCell>
                   </TableRow>
                 ))

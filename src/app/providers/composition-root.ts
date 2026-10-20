@@ -3,6 +3,7 @@ import { ProductRepository } from "@/modules/products/application/ports/product.
 import { CategoryRepository } from "@/modules/products/application/ports/product.repository";
 import { HttpProductRepository } from "@/modules/products/infrastructure/persistence/http-product.repository";
 import { HttpCategoryRepository } from "@/modules/products/infrastructure/persistence/http-category.repository";
+import { HttpUnitRepository } from "@/modules/products/infrastructure/persistence/http-unit.repository";
 import { MerchandiseEntryRepository } from "@/modules/warehouse/application/ports/merchandise-entry.repository";
 import { HttpMerchandiseEntryRepository } from "@/modules/warehouse/infrastructure/persistence/http-merchandise-entry.repository";
 import { InventoryMovementRepository } from "@/modules/inventory/application/ports/inventory-movement.repository";
@@ -19,26 +20,28 @@ export function createQueryClient() {
 export function createDeps() {
   const productRepo = new HttpProductRepository();
   const categoryRepo = new HttpCategoryRepository();
+  const unitRepo = new HttpUnitRepository();
   const merchandiseEntryRepo = new HttpMerchandiseEntryRepository();
   const movementRepo = new HttpInventoryMovementRepository();
   const priceHistoryRepo = new HttpPriceHistoryRepository();
-    const photoStorage = new HttpProductPhotoStorage();
-  
-    return {
-      // Products module
-      productRepo,
-      categoryRepo,
-  
-      // Warehouse module
-      merchandiseEntryRepo,
-  
-      // Inventory module
-      movementRepo,
-  
-      // Cross-cutting
-      priceHistoryRepo,
-      photoStorage,
-    };
+  const photoStorage = new HttpProductPhotoStorage();
+
+  return {
+    // Products module
+    productRepo,
+    categoryRepo,
+    unitRepo,
+
+    // Warehouse module
+    merchandiseEntryRepo,
+
+    // Inventory module
+    movementRepo,
+
+    // Cross-cutting
+    priceHistoryRepo,
+    photoStorage,
+  };
 }
 
 export function useAppQueryClient() {

@@ -20,3 +20,4 @@ export * from "./application/ports/unit.repository";
 export * from "./application/ports/price-history.repository";
 export * from "./application/ports/product-photo.storage";
 export * from "./presentation/pages/ProductsPage";
+export * from "./presentation/pages/ProductDetailPage";

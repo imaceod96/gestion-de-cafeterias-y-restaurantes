@@ -13,6 +13,7 @@ export class HttpCategoryRepository implements CategoryRepository {
       id: row.id,
       name: row.name,
       description: row.description,
+      isActive: row.isActive,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
     }));
@@ -27,6 +28,7 @@ export class HttpCategoryRepository implements CategoryRepository {
       id: row.id,
       name: row.name,
       description: row.description,
+      isActive: row.isActive,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
     });
@@ -37,14 +39,22 @@ export class HttpCategoryRepository implements CategoryRepository {
     const res = await fetch(this.baseUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: data.name, description: data.description }),
+      body: JSON.stringify({
+        name: data.name,
+        description: data.description,
+        isActive: data.isActive,
+      }),
     });
-    if (!res.ok) throw new Error("Error guardando categoría");
+    if (!res.ok) {
+      const body = await res.json().catch(() => null);
+      throw new Error(body?.statusMessage || "Error guardando categoría");
+    }
     const row = await res.json();
     return Category.fromData({
       id: row.id,
       name: row.name,
       description: row.description,
+      isActive: row.isActive,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
     });

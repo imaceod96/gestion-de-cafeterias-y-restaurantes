@@ -26,6 +26,7 @@ export function IngresarMercanciaPage() {
   const [selectedProductId, setSelectedProductId] = useState<string>("");
   const [quantity, setQuantity] = useState("");
   const [unitCost, setUnitCost] = useState("");
+  const [unitSalePrice, setUnitSalePrice] = useState("");
   const [supplier, setSupplier] = useState("");
   const [notes, setNotes] = useState("");
   const [entryDate, setEntryDate] = useState(new Date().toISOString().split("T")[0]);
@@ -55,24 +56,26 @@ export function IngresarMercanciaPage() {
       setSelectedProductId("");
       setQuantity("");
       setUnitCost("");
+      setUnitSalePrice("");
       setSupplier("");
       setNotes("");
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedProductId || !quantity || !unitCost) return;
-
-    createMutation.mutate({
-      productId: selectedProductId,
-      quantity: Number(quantity),
-      unitCost: Number(unitCost),
-      supplier: supplier || null,
-      notes: notes || null,
-      entryDate,
-    });
-  };
+      e.preventDefault();
+      if (!selectedProductId || !quantity || !unitCost || !unitSalePrice) return;
+  
+      createMutation.mutate({
+        productId: selectedProductId,
+        quantity: Number(quantity),
+        unitCost: Number(unitCost),
+        unitSalePrice: Number(unitSalePrice),
+        supplier: supplier || null,
+        notes: notes || null,
+        entryDate,
+      });
+    };
 
   const selectedProduct = products.find((p) => p.id.toString() === selectedProductId);
 
@@ -131,7 +134,7 @@ export function IngresarMercanciaPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="quantity">Cantidad *</Label>
                   <Input
@@ -154,6 +157,19 @@ export function IngresarMercanciaPage() {
                     min="0"
                     value={unitCost}
                     onChange={(e) => setUnitCost(e.target.value)}
+                    placeholder="0.00"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="unitSalePrice">Precio venta *</Label>
+                  <Input
+                    id="unitSalePrice"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={unitSalePrice}
+                    onChange={(e) => setUnitSalePrice(e.target.value)}
                     placeholder="0.00"
                     required
                   />
@@ -193,39 +209,51 @@ export function IngresarMercanciaPage() {
               </div>
 
               {selectedProduct && (
-                <div className="rounded-lg bg-coffee-50 p-4 border border-coffee-200">
-                  <h3 className="mb-2 font-medium text-coffee-900">Resumen de la entrada</h3>
-                  <div className="grid grid-cols-2 gap-2 text-sm">
-                    <div>
-                      <span className="text-coffee-600">Producto: </span>
-                      <span className="font-medium text-coffee-900">{selectedProduct.name}</span>
-                    </div>
-                    <div>
-                      <span className="text-coffee-600">Stock actual: </span>
-                      <span className="font-medium text-coffee-900">
-                        {selectedProduct.currentStock.toNumber()} {selectedProduct.unit}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-coffee-600">Nuevo stock: </span>
-                      <span className="font-medium text-coffee-900">
-                        {selectedProduct.currentStock.toNumber() + Number(quantity || 0)} {selectedProduct.unit}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-coffee-600">Total: </span>
-                      <span className="font-medium text-coffee-900">
-                        ${(Number(quantity || 0) * Number(unitCost || 0)).toFixed(2)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
+                              <div className="rounded-lg bg-coffee-50 p-4 border border-coffee-200">
+                                <h3 className="mb-2 font-medium text-coffee-900">Resumen de la entrada</h3>
+                                <div className="grid grid-cols-2 gap-2 text-sm">
+                                  <div>
+                                    <span className="text-coffee-600">Producto: </span>
+                                    <span className="font-medium text-coffee-900">{selectedProduct.name}</span>
+                                  </div>
+                                  <div>
+                                    <span className="text-coffee-600">Stock actual: </span>
+                                    <span className="font-medium text-coffee-900">
+                                      {selectedProduct.currentStock.toNumber()} {selectedProduct.unit}
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <span className="text-coffee-600">Nuevo stock: </span>
+                                    <span className="font-medium text-coffee-900">
+                                      {selectedProduct.currentStock.toNumber() + Number(quantity || 0)} {selectedProduct.unit}
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <span className="text-coffee-600">Total compra: </span>
+                                    <span className="font-medium text-coffee-900">
+                                      ${(Number(quantity || 0) * Number(unitCost || 0)).toFixed(2)}
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <span className="text-coffee-600">Precio venta: </span>
+                                    <span className="font-medium text-coffee-900">
+                                      ${Number(unitSalePrice || 0).toFixed(2)}
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <span className="text-coffee-600">Ganancia/unidad: </span>
+                                    <span className="font-medium text-coffee-900">
+                                      ${(Number(unitSalePrice || 0) - Number(unitCost || 0)).toFixed(2)}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
 
               <div className="flex justify-end gap-2 pt-4 border-t border-coffee-200">
                 <Button
                   type="submit"
-                  disabled={createMutation.isPending || !selectedProductId || !quantity || !unitCost}
+                  disabled={createMutation.isPending || !selectedProductId || !quantity || !unitCost || !unitSalePrice}
                   className="bg-caramel hover:bg-caramel/90 text-coffee-900"
                 >
                   {createMutation.isPending ? (
