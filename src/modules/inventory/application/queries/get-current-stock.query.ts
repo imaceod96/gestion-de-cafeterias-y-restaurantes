@@ -1,5 +1,5 @@
-import { ProductRepository } from "../../products/application/ports/product.repository";
-import { InventoryMovementRepository } from "./ports/inventory-movement.repository";
+import { ProductRepository } from "../../../products/application/ports/product.repository";
+import { InventoryMovementRepository } from "../ports/inventory-movement.repository";
 import { ID } from "../../../../shared/types";
 
 export type StockItem = {

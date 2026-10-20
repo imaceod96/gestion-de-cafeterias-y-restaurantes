@@ -181,12 +181,12 @@ export function ProductsPage() {
     if (editingProduct) {
       await updateMutation.mutateAsync({ id: editingProduct.id.toString(), ...command });
       if (photoFile) {
-        await handlePhotoUpload(editingProduct.id);
+        await handlePhotoUpload(editingProduct.id.toString());
       }
     } else {
       const result = await createMutation.mutateAsync(command);
       if (photoFile && result.product) {
-        await handlePhotoUpload(result.product.id);
+        await handlePhotoUpload(result.product.id.toString());
       }
     }
   };
@@ -414,7 +414,7 @@ function ProductFormDialog({
     const value = Number(e.target.value);
     setPurchasePrice(value);
     if (isEditing && product) {
-      await onPriceChange(product.id, "compra", value);
+      await onPriceChange(product.id.toString(), "compra", value);
     }
   };
 
@@ -422,8 +422,8 @@ function ProductFormDialog({
     const value = Number(e.target.value);
     setSalePrice(value);
     if (isEditing && product) {
-      await onPriceChange(product.id, "venta", value);
-    }
+          await onPriceChange(product.id.toString(), "venta", value);
+        }
   };
 
   const profitMargin = purchasePrice > 0 ? ((salePrice / purchasePrice) * 100 - 100) : null;
@@ -560,14 +560,14 @@ function ProductFormDialog({
                   className="sr-only"
                 />
                 <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => document.getElementById("photo")?.click()}
-                  className="bg-white border-coffee-200 hover:border-caramel"
-                >
-                  <Image className="h-4 w-4 mr-2" />
-                  {photoFile ? "Cambiar foto" : "Subir foto"}
-                </Button>
+                                  type="button"
+                                  variant="outline"
+                                  onClick={() => document.getElementById("photo")?.click()}
+                                  className="bg-white border-coffee-200 hover:border-caramel"
+                                >
+                                  <Image className="h-4 w-4 mr-2" />
+                                  {photoPreview ? "Cambiar foto" : "Subir foto"}
+                                </Button>
               </div>
               {photoPreview && (
                 <div className="relative">

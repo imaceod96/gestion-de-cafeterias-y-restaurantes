@@ -11,8 +11,8 @@ import { ProductDetailPage } from "@/modules/products/presentation/pages/Product
 import { IngresarMercanciaPage } from "@/modules/warehouse/presentation/pages/IngresarMercanciaPage";
 import { ExistenciaActualPage } from "@/modules/inventory/presentation/pages/ExistenciaActualPage";
 import { InventarioPage } from "@/modules/inventory/presentation/pages/InventarioPage";
-import { VentaValePage } from "@/modules/sales/presentation/pages/VentaValePage";
-import { MesasPage } from "@/modules/sales/presentation/pages/MesasPage";
+import VentaValePage from "@/modules/sales/presentation/pages/VentaValePage";
+import MesasPage from "@/modules/sales/presentation/pages/MesasPage";
 
 const queryClient = new QueryClient();
 

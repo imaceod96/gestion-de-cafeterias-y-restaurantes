@@ -20,6 +20,13 @@ export class HttpPriceHistoryRepository implements PriceHistoryRepository {
   }
 
   async save(entry: PriceHistory): Promise<PriceHistory> {
-    throw new Error("Price history is read-only from the client");
+    const data = entry.toData();
+    const res = await fetch(`/api/products/${data.productId}/price-history`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error("Error guardando historial de precios");
+    return entry;
   }
 }

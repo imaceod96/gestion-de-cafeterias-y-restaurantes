@@ -170,14 +170,14 @@ export function ProductDetailPage() {
   };
 
   const handlePhotoUpload = async () => {
-    if (!photoFile || !product) return;
-    await photoMutation.mutateAsync({ productId: product.id, file: photoFile });
-  };
+      if (!photoFile || !product) return;
+      await photoMutation.mutateAsync({ productId: product.id.toString(), file: photoFile });
+    };
 
   const handlePriceChange = async (priceType: "compra" | "venta", newPrice: number) => {
-    if (!product) return;
-    await changePriceMutation.mutateAsync({ productId: product.id, priceType, newPrice });
-  };
+      if (!product) return;
+      await changePriceMutation.mutateAsync({ productId: product.id.toString(), priceType, newPrice });
+    };
 
   const handleDelete = () => {
     if (!product) return;

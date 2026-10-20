@@ -8,7 +8,7 @@ export interface CutDetailData {
   productName: string;
   physicalCount: number;
   expectedCount: number;
-  difference: number;
+  difference?: number;
   unitCost: number;
   totalCost: number;
   createdAt: string;
@@ -93,7 +93,7 @@ export interface CutData {
   id: ID;
   date: string;
   status: CutStatus;
-  details: CutDetail[];
+  details: CutDetailData[];
   createdAt: string;
 }
 
@@ -108,7 +108,7 @@ export class InventoryCut {
     this.id = EntityId.create(data.id);
     this.date = Timestamp.fromISOString(data.date);
     this.status = data.status;
-    this.details = data.details;
+    this.details = data.details.map((d) => CutDetail.fromData(d));
     this.createdAt = Timestamp.fromISOString(data.createdAt);
   }
 
