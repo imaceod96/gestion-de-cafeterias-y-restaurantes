@@ -15,8 +15,6 @@ interface NavDropdownProps {
 }
 
 export function NavDropdown({ label, icon: Icon, items }: NavDropdownProps) {
-  const Icon = Icon;
-  
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:bg-coffee-100 text-coffee-700 hover:text-coffee-900">

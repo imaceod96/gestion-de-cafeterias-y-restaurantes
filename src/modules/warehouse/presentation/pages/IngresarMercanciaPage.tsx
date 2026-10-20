@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/ui/select";
-import { PackagePlus, Loader2 } from "lucide-react";
+import { PackagePlus, Loader2, Search } from "lucide-react";
 import { createDeps } from "@/app/providers/composition-root";
 import { getProducts } from "@/modules/products/application/queries/get-products.query";
 import { createMerchandiseEntry } from "@/modules/warehouse/application/commands/create-merchandise-entry.command";
