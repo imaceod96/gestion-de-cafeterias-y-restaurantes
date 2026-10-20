@@ -1,6 +1,7 @@
 import { APP_NAME, APP_TAGLINE, primaryActions, administrativeNavigation, salesNavigation, historyNavigation } from "@/app/config/navigation";
 import { Coffee, Receipt, UtensilsCrossed, Warehouse, Boxes, PackagePlus, ScanLine, ClipboardList, LayoutGrid, History } from "lucide-react";
 import { NavDropdown } from "@/shared/ui/navigation/NavDropdown";
+import { ProductAvailabilityMenu } from "@/app/components/ProductAvailabilityMenu";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,14 +10,15 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-coffee-800 rounded-lg flex items-center justify-center">
-                <Coffee className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-coffee-900">{APP_NAME}</h1>
-                <p className="text-sm text-coffee-600">{APP_TAGLINE}</p>
-              </div>
-            </div>
+                          <ProductAvailabilityMenu />
+                          <div className="w-10 h-10 bg-coffee-800 rounded-lg flex items-center justify-center">
+                            <Coffee className="w-6 h-6 text-white" />
+                          </div>
+                          <div>
+                            <h1 className="text-xl font-bold text-coffee-900">{APP_NAME}</h1>
+                            <p className="text-sm text-coffee-600">{APP_TAGLINE}</p>
+                          </div>
+                        </div>
 
             <nav className="hidden md:flex items-center space-x-6">
               {primaryActions.map((action) => {

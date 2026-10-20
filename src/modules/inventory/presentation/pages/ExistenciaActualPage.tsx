@@ -18,11 +18,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/ui/select";
-import { Search, Boxes, AlertTriangle, Package } from "lucide-react";
+import { Search, Boxes, AlertTriangle, Package, CheckCircle, Power } from "lucide-react";
 import { createDeps } from "@/app/providers/composition-root";
 import { getCurrentStock } from "@/modules/inventory/application/queries/get-current-stock.query";
 import { getCategories } from "@/modules/products/application/queries/get-categories.query";
 import { Category } from "@/modules/products/domain/entities/category";
+import { ProductThumbnail } from "@/shared/ui/product-thumbnail";
 
 const deps = createDeps();
 
@@ -160,9 +161,12 @@ export function ExistenciaActualPage() {
                   <TableRow key={item.productId} className="group">
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-lg bg-coffee-100 flex items-center justify-center">
-                          <Package className="h-5 w-5 text-coffee-400" />
-                        </div>
+                        <ProductThumbnail
+                          photoUrl={null}
+                          name={item.productName}
+                          unit={item.unit}
+                          size="sm"
+                        />
                         <div>
                           <div className="font-medium text-coffee-900">{item.productName}</div>
                           <div className="text-sm text-coffee-500">ID: {item.productId}</div>
@@ -184,14 +188,20 @@ export function ExistenciaActualPage() {
                       </span>
                     </TableCell>
                     <TableCell className="text-center">
-                      {item.isLowStock ? (
+                      {item.availability === "desactivado" ? (
+                        <Badge variant="secondary" className="bg-gray-100 text-gray-800">
+                          <Power className="h-3 w-3 mr-1" />
+                          DESACTIVADO
+                        </Badge>
+                      ) : item.availability === "agotado" ? (
                         <Badge variant="destructive" className="bg-red-100 text-red-800">
                           <AlertTriangle className="h-3 w-3 mr-1" />
-                          Bajo
+                          AGOTADO
                         </Badge>
                       ) : (
                         <Badge className="bg-green-100 text-green-800">
-                          OK
+                          <CheckCircle className="h-3 w-3 mr-1" />
+                          DISPONIBLE
                         </Badge>
                       )}
                     </TableCell>

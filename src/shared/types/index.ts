@@ -29,3 +29,5 @@ export type AdjustmentReason =
 export type VoucherStatus = "abierto" | "cerrado";
 
 export type AccountStatus = "abierta" | "cerrada";
+
+export type ProductAvailability = "disponible" | "agotado" | "desactivado";

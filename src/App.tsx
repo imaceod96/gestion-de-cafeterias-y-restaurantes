@@ -13,6 +13,8 @@ import { ExistenciaActualPage } from "@/modules/inventory/presentation/pages/Exi
 import { InventarioPage } from "@/modules/inventory/presentation/pages/InventarioPage";
 import VentaValePage from "@/modules/sales/presentation/pages/VentaValePage";
 import MesasPage from "@/modules/sales/presentation/pages/MesasPage";
+import HistorialValesPage from "@/modules/sales/presentation/pages/HistorialValesPage";
+import HistorialMesasPage from "@/modules/sales/presentation/pages/HistorialMesasPage";
 
 const queryClient = new QueryClient();
 
@@ -31,7 +33,9 @@ const App = () => (
             <Route path="/almacen/existencia-actual" element={<ExistenciaActualPage />} />
             <Route path="/almacen/inventario" element={<InventarioPage />} />
             <Route path="/ventas/vale" element={<VentaValePage />} />
-            <Route path="/mesas" element={<MesasPage />} />
+                        <Route path="/mesas" element={<MesasPage />} />
+                        <Route path="/historial/vales" element={<HistorialValesPage />} />
+                        <Route path="/historial/mesas" element={<HistorialMesasPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
