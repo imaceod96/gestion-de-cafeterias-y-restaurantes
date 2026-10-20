@@ -18,6 +18,7 @@ export default defineConfig(() => ({
       "@shared": path.resolve(__dirname, "./src/shared"),
       "@integrations": path.resolve(__dirname, "./src/integrations"),
       "@app": path.resolve(__dirname, "./src/app"),
+      "@server": path.resolve(__dirname, "./server"),
     },
   },
 }));

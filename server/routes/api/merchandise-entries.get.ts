@@ -1,7 +1,7 @@
 import { defineHandler } from "nitro";
 import { getQuery } from "nitro/h3";
 import { getMerchandiseEntries } from "@/modules/warehouse/application/queries/get-merchandise-entries.query";
-import { SqliteMerchandiseEntryRepository } from "@/server/modules/warehouse/infrastructure/persistence/sqlite-merchandise-entry.repository";
+import { SqliteMerchandiseEntryRepository } from "@/modules/warehouse/infrastructure/persistence/sqlite-merchandise-entry.repository";
 
 const entryRepo = new SqliteMerchandiseEntryRepository();
 

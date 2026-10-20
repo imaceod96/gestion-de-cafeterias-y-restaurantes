@@ -1,8 +1,8 @@
 import { defineHandler } from "nitro";
 import { readBody, getRouterParam, createError } from "nitro/h3";
 import { changePrice } from "@/modules/products/application/commands/change-price.command";
-import { SqliteProductRepository } from "@/server/modules/products/infrastructure/persistence/sqlite-product.repository";
-import { SqlitePriceHistoryRepository } from "@/server/modules/products/infrastructure/persistence/sqlite-price-history.repository";
+import { SqliteProductRepository } from "@/modules/products/infrastructure/persistence/sqlite-product.repository";
+import { SqlitePriceHistoryRepository } from "@/modules/products/infrastructure/persistence/sqlite-price-history.repository";
 
 const productRepo = new SqliteProductRepository();
 const priceHistoryRepo = new SqlitePriceHistoryRepository();

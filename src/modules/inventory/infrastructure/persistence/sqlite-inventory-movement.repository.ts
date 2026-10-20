@@ -1,7 +1,7 @@
-import { getDatabase } from "@/server/infrastructure/database/client";
-import { InventoryMovement } from "@/modules/inventory/domain/entities/inventory-movement";
-import { InventoryMovementRepository } from "@/modules/inventory/application/ports/inventory-movement.repository";
-import { ID } from "@/shared/types";
+import { getDatabase } from "@server/infrastructure/database/client";
+import { InventoryMovement } from "../../domain/entities/inventory-movement";
+import { InventoryMovementRepository } from "../../application/ports/inventory-movement.repository";
+import { ID } from "../../../../shared/types";
 
 export class SqliteInventoryMovementRepository implements InventoryMovementRepository {
   async findAll(productId?: ID): Promise<InventoryMovement[]> {

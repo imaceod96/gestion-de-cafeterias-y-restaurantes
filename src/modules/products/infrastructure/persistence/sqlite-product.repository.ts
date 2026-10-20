@@ -1,7 +1,7 @@
-import { getDatabase } from "@/server/infrastructure/database/client";
-import { Product } from "@/modules/products/domain/entities/product";
-import { ProductRepository } from "@/modules/products/application/ports/product.repository";
-import { ID } from "@/shared/types";
+import { getDatabase } from "@server/infrastructure/database/client";
+import { Product } from "../../domain/entities/product";
+import { ProductRepository } from "../../application/ports/product.repository";
+import { ID } from "../../../../shared/types";
 
 export class SqliteProductRepository implements ProductRepository {
   async findAll(activeOnly = true): Promise<Product[]> {

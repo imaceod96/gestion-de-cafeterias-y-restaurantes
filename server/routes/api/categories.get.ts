@@ -1,6 +1,6 @@
 import { defineHandler } from "nitro";
 import { getCategories } from "@/modules/products/application/queries/get-categories.query";
-import { SqliteCategoryRepository } from "@/server/modules/products/infrastructure/persistence/sqlite-category.repository";
+import { SqliteCategoryRepository } from "@/modules/products/infrastructure/persistence/sqlite-category.repository";
 
 const categoryRepo = new SqliteCategoryRepository();
 

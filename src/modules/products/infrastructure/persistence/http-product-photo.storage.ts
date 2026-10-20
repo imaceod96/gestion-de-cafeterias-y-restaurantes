@@ -1,8 +1,8 @@
-import { ProductPhotoStorage, StoredPhoto } from "../ports/product-photo.storage";
+import { ProductPhotoStorage, StoredPhoto } from "../../application/ports/product-photo.storage";
 
 export class HttpProductPhotoStorage implements ProductPhotoStorage {
-  async save(fileName: string, contentType: string, data: Uint8Array): Promise<StoredPhoto> {
-    const res = await fetch("/api/products/photo", {
+  async save(productId: string, fileName: string, contentType: string, data: Uint8Array): Promise<StoredPhoto> {
+    const res = await fetch(`/api/products/${productId}/photo`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ fileName, contentType, data: Array.from(data) }),

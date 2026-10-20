@@ -1,5 +1,5 @@
-import { PageHeader } from "../../../../shared/ui/layout/PageHeader";
-import { ModulePlaceholder } from "../../../../shared/ui/layout/ModulePlaceholder";
+import { PageHeader } from "@/shared/ui/layout/PageHeader";
+import { ModulePlaceholder } from "@/shared/ui/layout/ModulePlaceholder";
 import { PackagePlus } from "lucide-react";
 
 export function IngresarMercanciaPage() {

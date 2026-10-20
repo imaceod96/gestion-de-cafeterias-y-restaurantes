@@ -1,6 +1,6 @@
 import { InventoryMovement } from "../../domain/entities/inventory-movement";
-import { InventoryMovementRepository } from "../ports/inventory-movement.repository";
-import { ID } from "../../../../shared/types";
+import { InventoryMovementRepository } from "../../application/ports/inventory-movement.repository";
+import { ID } from "../../../shared/types";
 
 export class HttpInventoryMovementRepository implements InventoryMovementRepository {
   async findAll(productId?: ID): Promise<InventoryMovement[]> {
@@ -10,16 +10,16 @@ export class HttpInventoryMovementRepository implements InventoryMovementReposit
     const data = await res.json();
     return data.map((row: any) => InventoryMovement.fromData({
       id: row.id,
-      productId: row.product_id,
+      productId: row.productId,
       type: row.type,
       quantity: row.quantity,
-      previousStock: row.previous_stock,
-      newStock: row.new_stock,
+      previousStock: row.previousStock,
+      newStock: row.newStock,
       reason: row.reason,
-      referenceId: row.reference_id,
-      referenceType: row.reference_type,
-      movementDate: row.movement_date,
-      createdAt: row.created_at,
+      referenceId: row.referenceId,
+      referenceType: row.referenceType,
+      movementDate: row.movementDate,
+      createdAt: row.createdAt,
     }));
   }
 

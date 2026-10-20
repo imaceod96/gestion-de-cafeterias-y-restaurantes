@@ -1,6 +1,6 @@
 import { MerchandiseEntry } from "../../domain/entities/merchandise-entry";
-import { MerchandiseEntryRepository } from "../ports/merchandise-entry.repository";
-import { ID } from "../../../../shared/types";
+import { MerchandiseEntryRepository } from "../../application/ports/merchandise-entry.repository";
+import { ID } from "../../../shared/types";
 
 export class HttpMerchandiseEntryRepository implements MerchandiseEntryRepository {
   private baseUrl = "/api/merchandise-entries";
@@ -12,14 +12,14 @@ export class HttpMerchandiseEntryRepository implements MerchandiseEntryRepositor
     const data = await res.json();
     return data.map((row: any) => MerchandiseEntry.fromData({
       id: row.id,
-      productId: row.product_id,
+      productId: row.productId,
       quantity: row.quantity,
-      unitCost: row.unit_cost,
-      totalCost: row.total_cost,
+      unitCost: row.unitCost,
+      totalCost: row.totalCost,
       supplier: row.supplier,
       notes: row.notes,
-      entryDate: row.entry_date,
-      createdAt: row.created_at,
+      entryDate: row.entryDate,
+      createdAt: row.createdAt,
     }));
   }
 
@@ -30,14 +30,14 @@ export class HttpMerchandiseEntryRepository implements MerchandiseEntryRepositor
     const row = await res.json();
     return MerchandiseEntry.fromData({
       id: row.id,
-      productId: row.product_id,
+      productId: row.productId,
       quantity: row.quantity,
-      unitCost: row.unit_cost,
-      totalCost: row.total_cost,
+      unitCost: row.unitCost,
+      totalCost: row.totalCost,
       supplier: row.supplier,
       notes: row.notes,
-      entryDate: row.entry_date,
-      createdAt: row.created_at,
+      entryDate: row.entryDate,
+      createdAt: row.createdAt,
     });
   }
 
@@ -59,14 +59,14 @@ export class HttpMerchandiseEntryRepository implements MerchandiseEntryRepositor
     const row = await res.json();
     return MerchandiseEntry.fromData({
       id: row.id,
-      productId: row.product_id,
+      productId: row.productId,
       quantity: row.quantity,
-      unitCost: row.unit_cost,
-      totalCost: row.total_cost,
+      unitCost: row.unitCost,
+      totalCost: row.totalCost,
       supplier: row.supplier,
       notes: row.notes,
-      entryDate: row.entry_date,
-      createdAt: row.created_at,
+      entryDate: row.entryDate,
+      createdAt: row.createdAt,
     });
   }
 

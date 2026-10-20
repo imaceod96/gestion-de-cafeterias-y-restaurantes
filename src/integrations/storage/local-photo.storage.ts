@@ -1,6 +1,5 @@
-import { mkdirSync, writeFileSync, unlinkSync, existsSync, rmdirSync, readdirSync } from "node:fs";
-import { join, dirname } from "node:path";
-import { resolve } from "node:path";
+import { mkdirSync, writeFileSync, unlinkSync, existsSync } from "node:fs";
+import { join, resolve } from "node:path";
 import { ProductPhotoStorage, StoredPhoto } from "@/modules/products/application/ports/product-photo.storage";
 
 const UPLOAD_DIR = resolve(process.cwd(), "data", "uploads");

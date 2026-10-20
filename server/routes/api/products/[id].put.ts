@@ -1,7 +1,7 @@
 import { defineHandler } from "nitro";
 import { readBody, getRouterParam, createError } from "nitro/h3";
 import { updateProduct } from "@/modules/products/application/commands/update-product.command";
-import { SqliteProductRepository } from "@/server/modules/products/infrastructure/persistence/sqlite-product.repository";
+import { SqliteProductRepository } from "@/modules/products/infrastructure/persistence/sqlite-product.repository";
 
 const productRepo = new SqliteProductRepository();
 

@@ -1,5 +1,5 @@
-import { PageHeader } from "../../../../shared/ui/layout/PageHeader";
-import { ModulePlaceholder } from "../../../../shared/ui/layout/ModulePlaceholder";
+import { PageHeader } from "@/shared/ui/layout/PageHeader";
+import { ModulePlaceholder } from "@/shared/ui/layout/ModulePlaceholder";
 import { Package } from "lucide-react";
 
 export function ProductsPage() {

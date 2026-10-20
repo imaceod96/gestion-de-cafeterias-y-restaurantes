@@ -1,7 +1,7 @@
-import { getDatabase } from "@/server/infrastructure/database/client";
-import { PriceHistory } from "@/modules/products/domain/entities/price-history";
-import { PriceHistoryRepository } from "@/modules/products/application/ports/price-history.repository";
-import { ID } from "@/shared/types";
+import { getDatabase } from "@server/infrastructure/database/client";
+import { PriceHistory } from "../../domain/entities/price-history";
+import { PriceHistoryRepository } from "../../application/ports/price-history.repository";
+import { ID } from "../../../../shared/types";
 
 export class SqlitePriceHistoryRepository implements PriceHistoryRepository {
   async findByProduct(productId: ID): Promise<PriceHistory[]> {

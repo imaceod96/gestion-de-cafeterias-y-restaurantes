@@ -1,7 +1,7 @@
-import { getDatabase } from "@/server/infrastructure/database/client";
-import { MerchandiseEntry } from "@/modules/warehouse/domain/entities/merchandise-entry";
-import { MerchandiseEntryRepository } from "@/modules/warehouse/application/ports/merchandise-entry.repository";
-import { ID } from "@/shared/types";
+import { getDatabase } from "@server/infrastructure/database/client";
+import { MerchandiseEntry } from "../../domain/entities/merchandise-entry";
+import { MerchandiseEntryRepository } from "../../application/ports/merchandise-entry.repository";
+import { ID } from "../../../../shared/types";
 
 export class SqliteMerchandiseEntryRepository implements MerchandiseEntryRepository {
   async findAll(productId?: ID): Promise<MerchandiseEntry[]> {

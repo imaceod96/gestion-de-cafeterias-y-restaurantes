@@ -7,9 +7,11 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   serverDir: "./server",
   alias: {
+    "@": resolve(__dirname, "./src"),
     "@modules": resolve(__dirname, "./src/modules"),
     "@shared": resolve(__dirname, "./src/shared"),
     "@integrations": resolve(__dirname, "./src/integrations"),
     "@app": resolve(__dirname, "./src/app"),
+    "@server": resolve(__dirname, "./server"),
   },
 });

@@ -1,6 +1,6 @@
 import { Category } from "../../domain/entities/category";
-import { CategoryRepository } from "../ports/product.repository";
-import { ID } from "../../../../shared/types";
+import { CategoryRepository } from "../../application/ports/product.repository";
+import { ID } from "../../../shared/types";
 
 export class HttpCategoryRepository implements CategoryRepository {
   private baseUrl = "/api/categories";
@@ -13,8 +13,8 @@ export class HttpCategoryRepository implements CategoryRepository {
       id: row.id,
       name: row.name,
       description: row.description,
-      createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
     }));
   }
 
@@ -27,8 +27,8 @@ export class HttpCategoryRepository implements CategoryRepository {
       id: row.id,
       name: row.name,
       description: row.description,
-      createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
     });
   }
 
@@ -45,8 +45,8 @@ export class HttpCategoryRepository implements CategoryRepository {
       id: row.id,
       name: row.name,
       description: row.description,
-      createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
     });
   }
 

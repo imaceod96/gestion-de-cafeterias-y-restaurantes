@@ -1,6 +1,6 @@
 import { PriceHistory } from "../../domain/entities/price-history";
-import { PriceHistoryRepository } from "../ports/price-history.repository";
-import { ID } from "../../../../shared/types";
+import { PriceHistoryRepository } from "../../application/ports/price-history.repository";
+import { ID } from "../../../shared/types";
 
 export class HttpPriceHistoryRepository implements PriceHistoryRepository {
   async findByProduct(productId: ID): Promise<PriceHistory[]> {
@@ -9,13 +9,13 @@ export class HttpPriceHistoryRepository implements PriceHistoryRepository {
     const data = await res.json();
     return data.map((row: any) => PriceHistory.fromData({
       id: row.id,
-      productId: row.product_id,
-      priceType: row.price_type,
-      oldPrice: row.old_price,
-      newPrice: row.new_price,
-      changedBy: row.changed_by,
-      changeDate: row.change_date,
-      createdAt: row.created_at,
+      productId: row.productId,
+      priceType: row.priceType,
+      oldPrice: row.oldPrice,
+      newPrice: row.newPrice,
+      changedBy: row.changedBy,
+      changeDate: row.changeDate,
+      createdAt: row.createdAt,
     }));
   }
 

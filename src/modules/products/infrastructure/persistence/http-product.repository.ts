@@ -1,6 +1,6 @@
 import { Product } from "../../domain/entities/product";
-import { ProductRepository } from "../ports/product.repository";
-import { ID } from "../../../../shared/types";
+import { ProductRepository } from "../../application/ports/product.repository";
+import { ID } from "../../../shared/types";
 
 export class HttpProductRepository implements ProductRepository {
   private baseUrl = "/api/products";
@@ -9,20 +9,20 @@ export class HttpProductRepository implements ProductRepository {
     const res = await fetch(`${this.baseUrl}?activeOnly=${activeOnly}`);
     if (!res.ok) throw new Error("Error obteniendo productos");
     const data = await res.json();
-    return data.map((row: any) => Product.fromData({
+    return data.map ( (row: any) => Product.fromData({
       id: row.id,
-      categoryId: row.category_id,
+      categoryId: row.categoryId,
       name: row.name,
       description: row.description,
       unit: row.unit,
-      currentPurchasePrice: row.current_purchase_price,
-      currentSalePrice: row.current_sale_price,
-      currentStock: row.current_stock,
-      minStock: row.min_stock,
-      isActive: row.is_active,
-      photoUrl: row.photo_url,
-      createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      currentPurchasePrice: row.currentPurchasePrice,
+      currentSalePrice: row.currentSalePrice,
+      currentStock: row.currentStock,
+      minStock: row.minStock,
+      isActive: row.isActive,
+      photoUrl: row.photoUrl,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
     }));
   }
 
@@ -33,18 +33,18 @@ export class HttpProductRepository implements ProductRepository {
     const row = await res.json();
     return Product.fromData({
       id: row.id,
-      categoryId: row.category_id,
+      categoryId: row.categoryId,
       name: row.name,
       description: row.description,
       unit: row.unit,
-      currentPurchasePrice: row.current_purchase_price,
-      currentSalePrice: row.current_sale_price,
-      currentStock: row.current_stock,
-      minStock: row.min_stock,
-      isActive: row.is_active,
-      photoUrl: row.photo_url,
-      createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      currentPurchasePrice: row.currentPurchasePrice,
+      currentSalePrice: row.currentSalePrice,
+      currentStock: row.currentStock,
+      minStock: row.minStock,
+      isActive: row.isActive,
+      photoUrl: row.photoUrl,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
     });
   }
 
@@ -56,18 +56,18 @@ export class HttpProductRepository implements ProductRepository {
     const row = data[0];
     return Product.fromData({
       id: row.id,
-      categoryId: row.category_id,
+      categoryId: row.categoryId,
       name: row.name,
       description: row.description,
       unit: row.unit,
-      currentPurchasePrice: row.current_purchase_price,
-      currentSalePrice: row.current_sale_price,
-      currentStock: row.current_stock,
-      minStock: row.min_stock,
-      isActive: row.is_active,
-      photoUrl: row.photo_url,
-      createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      currentPurchasePrice: row.currentPurchasePrice,
+      currentSalePrice: row.currentSalePrice,
+      currentStock: row.currentStock,
+      minStock: row.minStock,
+      isActive: row.isActive,
+      photoUrl: row.photoUrl,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
     });
   }
 
@@ -91,18 +91,18 @@ export class HttpProductRepository implements ProductRepository {
     const row = await res.json();
     return Product.fromData({
       id: row.id,
-      categoryId: row.category_id,
+      categoryId: row.categoryId,
       name: row.name,
       description: row.description,
       unit: row.unit,
-      currentPurchasePrice: row.current_purchase_price,
-      currentSalePrice: row.current_sale_price,
-      currentStock: row.current_stock,
-      minStock: row.min_stock,
-      isActive: row.is_active,
-      photoUrl: row.photo_url,
-      createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      currentPurchasePrice: row.currentPurchasePrice,
+      currentSalePrice: row.currentSalePrice,
+      currentStock: row.currentStock,
+      minStock: row.minStock,
+      isActive: row.isActive,
+      photoUrl: row.photoUrl,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
     });
   }
 
