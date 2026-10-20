@@ -1,8 +1,8 @@
 import { defineHandler } from "nitro";
 import { readBody, getRouterParam, createError } from "nitro/h3";
 import { setPhoto } from "@/modules/products/application/commands/set-photo.command";
-import { SqliteProductRepository } from "@server/modules/products/infrastructure/persistence/sqlite-product.repository";
-import { LocalPhotoStorage } from "@server/integrations/storage/local-photo.storage";
+import { SqliteProductRepository } from "@/server/infrastructure/persistence/products/product.repository";
+import { LocalPhotoStorage } from "@/server/integrations/storage/local-photo.storage";
 
 const productRepo = new SqliteProductRepository();
 const photoStorage = new LocalPhotoStorage();

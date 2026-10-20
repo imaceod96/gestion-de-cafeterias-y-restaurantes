@@ -1,11 +1,12 @@
 import { EntityId, Timestamp, Price, StockQuantity } from "../../../../shared/domain/value-objects";
-import { ID, Unit } from "../../../../shared/types";
+import { ID } from "../../../../shared/types";
 
 export interface MerchandiseEntryData {
   id: ID;
   productId: ID;
   quantity: number;
   unitCost: number;
+  unitSalePrice: number;
   totalCost: number;
   supplier: string | null;
   notes: string | null;
@@ -18,6 +19,7 @@ export class MerchandiseEntry {
   public readonly productId: EntityId;
   public readonly quantity: StockQuantity;
   public readonly unitCost: Price;
+  public readonly unitSalePrice: Price;
   public readonly totalCost: Price;
   public readonly supplier: string | null;
   public readonly notes: string | null;
@@ -29,6 +31,7 @@ export class MerchandiseEntry {
     this.productId = EntityId.create(data.productId);
     this.quantity = StockQuantity.create(data.quantity);
     this.unitCost = Price.create(data.unitCost);
+    this.unitSalePrice = Price.create(data.unitSalePrice);
     this.totalCost = Price.create(data.totalCost);
     this.supplier = data.supplier;
     this.notes = data.notes;
@@ -41,6 +44,7 @@ export class MerchandiseEntry {
     productId: ID;
     quantity: number;
     unitCost: number;
+    unitSalePrice: number;
     supplier?: string | null;
     notes?: string | null;
     entryDate?: string;
@@ -53,6 +57,7 @@ export class MerchandiseEntry {
       productId: data.productId,
       quantity: data.quantity,
       unitCost: data.unitCost,
+      unitSalePrice: data.unitSalePrice,
       totalCost,
       supplier: data.supplier ?? null,
       notes: data.notes ?? null,
@@ -71,6 +76,7 @@ export class MerchandiseEntry {
       productId: this.productId.toString(),
       quantity: this.quantity.toNumber(),
       unitCost: this.unitCost.toNumber(),
+      unitSalePrice: this.unitSalePrice.toNumber(),
       totalCost: this.totalCost.toNumber(),
       supplier: this.supplier,
       notes: this.notes,

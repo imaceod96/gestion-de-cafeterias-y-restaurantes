@@ -35,7 +35,7 @@ export const setPhoto = async (
       }
     }
 
-    const stored = await deps.photoStorage.save(command.fileName, command.contentType, command.data);
+    const stored = await deps.photoStorage.save(command.productId, command.fileName, command.contentType, command.data);
     const updated = product.withPhoto(stored.url);
     await deps.productRepo.save(updated);
     return { product: updated, success: true };

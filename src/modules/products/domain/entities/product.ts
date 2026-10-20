@@ -1,4 +1,4 @@
-import { EntityId, Timestamp, Price, StockQuantity, Percentage } from "../../../../shared/domain/value-objects";
+import { EntityId, Timestamp, Price, StockQuantity, Percentage, ProfitMargin } from "../../../../shared/domain/value-objects";
 import { ID, Unit, PriceType } from "../../../../shared/types";
 
 export interface ProductData {
@@ -103,14 +103,12 @@ export class Product {
     };
   }
 
-  getProfitMargin(): { amount: Price; percentage: Percentage } {
-    const amount = this.currentSalePrice.subtract(this.currentPurchasePrice);
-    const percentageValue =
-      this.currentPurchasePrice.toNumber() > 0
-        ? ((this.currentSalePrice.toNumber() / this.currentPurchasePrice.toNumber()) * 100 - 100)
-        : 0;
-    const percentage = Percentage.create(Math.max(0, percentageValue));
-    return { amount, percentage };
+  getProfitMargin(): ProfitMargin {
+    return ProfitMargin.calculate(this.currentSalePrice, this.currentPurchasePrice);
+  }
+
+  getProfitAmount(): Price {
+    return this.currentSalePrice.subtract(this.currentPurchasePrice);
   }
 
   isLowStock(): boolean {
@@ -143,6 +141,22 @@ export class Product {
     return new Product({
       ...this.toData(),
       photoUrl,
+      updatedAt: Timestamp.now().toISOString(),
+    });
+  }
+
+  deactivate(): Product {
+    return new Product({
+      ...this.toData(),
+      isActive: false,
+      updatedAt: Timestamp.now().toISOString(),
+    });
+  }
+
+  activate(): Product {
+    return new Product({
+      ...this.toData(),
+      isActive: true,
       updatedAt: Timestamp.now().toISOString(),
     });
   }

@@ -15,6 +15,7 @@ export class SqliteMerchandiseEntryRepository implements MerchandiseEntryReposit
         productId: row.product_id,
         quantity: row.quantity,
         unitCost: row.unit_cost,
+        unitSalePrice: row.unit_sale_price,
         totalCost: row.total_cost,
         supplier: row.supplier,
         notes: row.notes,
@@ -33,6 +34,7 @@ export class SqliteMerchandiseEntryRepository implements MerchandiseEntryReposit
       productId: row.product_id,
       quantity: row.quantity,
       unitCost: row.unit_cost,
+      unitSalePrice: row.unit_sale_price,
       totalCost: row.total_cost,
       supplier: row.supplier,
       notes: row.notes,
@@ -45,13 +47,14 @@ export class SqliteMerchandiseEntryRepository implements MerchandiseEntryReposit
     const db = getDatabase();
     const data = entry.toData();
     db.prepare(
-      `INSERT INTO merchandise_entries (id, product_id, quantity, unit_cost, total_cost, supplier, notes, entry_date, created_at)
-       VALUES (@id, @productId, @quantity, @unitCost, @totalCost, @supplier, @notes, @entryDate, @createdAt)`
+      `INSERT INTO merchandise_entries (id, product_id, quantity, unit_cost, unit_sale_price, total_cost, supplier, notes, entry_date, created_at)
+       VALUES (@id, @productId, @quantity, @unitCost, @unitSalePrice, @totalCost, @supplier, @notes, @entryDate, @createdAt)`
     ).run({
       id: data.id,
       productId: data.productId,
       quantity: data.quantity,
       unitCost: data.unitCost,
+      unitSalePrice: data.unitSalePrice,
       totalCost: data.totalCost,
       supplier: data.supplier,
       notes: data.notes,

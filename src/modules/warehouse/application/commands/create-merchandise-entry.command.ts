@@ -11,6 +11,7 @@ export type CreateMerchandiseEntryCommand = {
   productId: ID;
   quantity: number;
   unitCost: number;
+  unitSalePrice: number;
   supplier?: string | null;
   notes?: string | null;
   entryDate?: string;
@@ -41,6 +42,9 @@ export const createMerchandiseEntry = async (
     if (command.unitCost < 0) {
       return { entry: {} as MerchandiseEntry, success: false, error: "El costo unitario no puede ser negativo" };
     }
+    if (command.unitSalePrice < 0) {
+      return { entry: {} as MerchandiseEntry, success: false, error: "El precio de venta no puede ser negativo" };
+    }
 
     const product = await deps.productRepo.findById(command.productId);
     if (!product) {
@@ -54,6 +58,7 @@ export const createMerchandiseEntry = async (
       productId: command.productId,
       quantity: command.quantity,
       unitCost: command.unitCost,
+      unitSalePrice: command.unitSalePrice,
       supplier: command.supplier,
       notes: command.notes,
       entryDate: command.entryDate,
@@ -73,16 +78,36 @@ export const createMerchandiseEntry = async (
     await deps.movementRepo.save(movement);
 
     // The purchase price of the product follows the latest entry cost.
-    const oldPrice = product.currentPurchasePrice.toNumber();
-    await deps.productRepo.save(product.withStockChange(command.quantity).withUpdatedPrice("compra", command.unitCost));
+    const oldPurchasePrice = product.currentPurchasePrice.toNumber();
+    const oldSalePrice = product.currentSalePrice.toNumber();
 
-    if (oldPrice !== command.unitCost) {
+    const updatedProduct = product
+      .withStockChange(command.quantity)
+      .withUpdatedPrice("compra", command.unitCost)
+      .withUpdatedPrice("venta", command.unitSalePrice);
+
+    await deps.productRepo.save(updatedProduct);
+
+    // Record price history for purchase price changes
+    if (oldPurchasePrice !== command.unitCost) {
       await deps.priceHistoryRepo.save(
         PriceHistory.create({
           productId: command.productId,
           priceType: "compra",
-          oldPrice,
+          oldPrice: oldPurchasePrice,
           newPrice: command.unitCost,
+        })
+      );
+    }
+
+    // Record price history for sale price changes
+    if (oldSalePrice !== command.unitSalePrice) {
+      await deps.priceHistoryRepo.save(
+        PriceHistory.create({
+          productId: command.productId,
+          priceType: "venta",
+          oldPrice: oldSalePrice,
+          newPrice: command.unitSalePrice,
         })
       );
     }

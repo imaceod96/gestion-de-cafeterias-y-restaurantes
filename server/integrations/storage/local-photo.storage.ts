@@ -17,7 +17,7 @@ export class LocalPhotoStorage implements ProductPhotoStorage {
     }
   }
 
-  async save(fileName: string, contentType: string, data: Uint8Array): Promise<StoredPhoto> {
+  async save(productId: string, fileName: string, contentType: string, data: Uint8Array): Promise<StoredPhoto> {
     const safeName = fileName.replace(/[^a-zA-Z0-9._-]/g, "_");
     const filePath = join(UPLOAD_DIR, safeName);
     writeFileSync(filePath, Buffer.from(data));

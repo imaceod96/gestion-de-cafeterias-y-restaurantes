@@ -11,6 +11,11 @@ export interface StoredPhoto {
  * the returned public URL.
  */
 export interface ProductPhotoStorage {
-  save(fileName: string, contentType: string, data: Uint8Array): Promise<StoredPhoto>;
+  save(
+    productId: string,
+    fileName: string,
+    contentType: string,
+    data: Uint8Array
+  ): Promise<StoredPhoto>;
   remove(url: string): Promise<void>;
 }
