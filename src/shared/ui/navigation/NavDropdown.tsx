@@ -1,72 +1,41 @@
-import { ReactNode } from "react";
-import { NavLink } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
-import { cn } from "../../lib/utils";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/shared/ui/dropdown-menu";
 
-export type NavDropdownItem = {
+interface NavDropdownItem {
   label: string;
+  description: string;
   to: string;
-  description?: string;
-  icon?: React.ElementType;
-};
+  icon: any;
+}
 
-type NavDropdownProps = {
+interface NavDropdownProps {
   label: string;
+  icon: any;
   items: NavDropdownItem[];
-  className?: string;
-  align?: "start" | "center" | "end";
-};
+}
 
-export function NavDropdown({
-  label,
-  items,
-  className,
-  align = "start",
-}: NavDropdownProps) {
+export function NavDropdown({ label, icon: Icon, items }: NavDropdownProps) {
+  const Icon = Icon;
+  
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger
-        className={cn(
-          "focus-ring inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-coffee-200 transition-colors hover:bg-coffee-800 hover:text-white",
-          className
-        )}
-      >
-        {label}
-        <ChevronDown className="h-4 w-4" />
+      <DropdownMenuTrigger className="flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:bg-coffee-100 text-coffee-700 hover:text-coffee-900">
+        <Icon className="w-5 h-5" />
+        <span>{label}</span>
+        <ChevronDown className="w-4 h-4" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align={align}
-        className="w-64 rounded-xl border-border bg-card p-1.5 shadow-lg"
-      >
+      <DropdownMenuContent align="end" className="w-56">
         {items.map((item) => {
-          const Icon = item.icon;
+          const ItemIcon = item.icon;
           return (
-            <DropdownMenuItem
-              key={item.to}
-              asChild
-              className="cursor-pointer rounded-lg px-3 py-2.5 focus:bg-coffee-100 focus:text-coffee-900"
-            >
-              <NavLink to={item.to} className="flex items-start gap-3">
-                {Icon ? (
-                  <Icon className="mt-0.5 h-4 w-4 shrink-0 text-caramel" />
-                ) : null}
-                <span className="flex flex-col">
-                  <span className="text-sm font-medium leading-none">
-                    {item.label}
-                  </span>
-                  {item.description ? (
-                    <span className="mt-1 text-xs leading-snug text-muted-foreground">
-                      {item.description}
-                    </span>
-                  ) : null}
-                </span>
-              </NavLink>
+            <DropdownMenuItem key={item.label} asChild>
+              <a href={item.to} className="flex items-center space-x-3 p-3">
+                <ItemIcon className="w-5 h-5 text-coffee-600" />
+                <div>
+                  <div className="font-medium text-coffee-900">{item.label}</div>
+                  <div className="text-sm text-coffee-600">{item.description}</div>
+                </div>
+              </a>
             </DropdownMenuItem>
           );
         })}

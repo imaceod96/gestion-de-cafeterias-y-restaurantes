@@ -1,7 +1,5 @@
 import { Product } from "../../domain/entities/product";
-import { ProductData } from "../../domain/entities/product";
-import { EntityId } from "../../../shared/domain/value-objects";
-import { ID } from "../../../shared/types";
+import { ProductRepository } from "../ports/product.repository";
 
 export type GetProductsQuery = {
   activeOnly?: boolean;
@@ -15,25 +13,14 @@ export type GetProductsResult = {
 };
 
 export const getProducts = async (
-  query: GetProductsQuery = {}
+  query: GetProductsQuery = {},
+  deps: { productRepo: ProductRepository }
 ): Promise<GetProductsResult> => {
   try {
     const { activeOnly = true } = query;
-    // In a real implementation, this would query the database
-    // For now, return empty array
-    const products: Product[] = [];
-
-    return {
-      products,
-      total: 0,
-      success: true,
-    };
+    const products = await deps.productRepo.findAll(activeOnly);
+    return { products, total: products.length, success: true };
   } catch (error: any) {
-    return {
-      products: [],
-      total: 0,
-      success: false,
-      error: error.message || "Error getting products",
-    };
+    return { products: [], total: 0, success: false, error: error.message || "Error obteniendo productos" };
   }
 };

@@ -12,6 +12,7 @@ export interface ProductData {
   currentStock: number;
   minStock: number;
   isActive: boolean;
+  photoUrl: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -27,6 +28,7 @@ export class Product {
   public readonly currentStock: StockQuantity;
   public readonly minStock: StockQuantity;
   public readonly isActive: boolean;
+  public readonly photoUrl: string | null;
   public readonly createdAt: Timestamp;
   public readonly updatedAt: Timestamp;
 
@@ -41,6 +43,7 @@ export class Product {
     this.currentStock = StockQuantity.create(data.currentStock);
     this.minStock = StockQuantity.create(data.minStock);
     this.isActive = data.isActive;
+    this.photoUrl = data.photoUrl;
     this.createdAt = Timestamp.fromISOString(data.createdAt);
     this.updatedAt = Timestamp.fromISOString(data.updatedAt);
   }
@@ -56,6 +59,7 @@ export class Product {
     currentStock?: number;
     minStock?: number;
     isActive?: boolean;
+    photoUrl?: string | null;
     createdAt?: string;
     updatedAt?: string;
   }): Product {
@@ -71,6 +75,7 @@ export class Product {
       currentStock: data.currentStock ?? 0,
       minStock: data.minStock ?? 0,
       isActive: data.isActive ?? true,
+      photoUrl: data.photoUrl ?? null,
       createdAt: data.createdAt ?? now,
       updatedAt: data.updatedAt ?? now,
     });
@@ -92,6 +97,7 @@ export class Product {
       currentStock: this.currentStock.toNumber(),
       minStock: this.minStock.toNumber(),
       isActive: this.isActive,
+      photoUrl: this.photoUrl,
       createdAt: this.createdAt.toISOString(),
       updatedAt: this.updatedAt.toISOString(),
     };
@@ -129,6 +135,14 @@ export class Product {
     return new Product({
       ...this.toData(),
       currentStock: newStock,
+      updatedAt: Timestamp.now().toISOString(),
+    });
+  }
+
+  withPhoto(photoUrl: string | null): Product {
+    return new Product({
+      ...this.toData(),
+      photoUrl,
       updatedAt: Timestamp.now().toISOString(),
     });
   }

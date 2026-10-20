@@ -1,10 +1,6 @@
-import { InventoryMovement } from "../../domain/entities/inventory-movement";
-import { EntityId } from "../../../shared/domain/value-objects";
-import { ID } from "../../../shared/types";
-
-export type GetCurrentStockQuery = {
-  productId?: ID;
-};
+import { ProductRepository } from "../../products/application/ports/product.repository";
+import { InventoryMovementRepository } from "./ports/inventory-movement.repository";
+import { ID } from "../../../../shared/types";
 
 export type StockItem = {
   productId: ID;
@@ -12,6 +8,13 @@ export type StockItem = {
   currentStock: number;
   reservedStock: number;
   availableStock: number;
+  minStock: number;
+  isLowStock: boolean;
+};
+
+export type GetCurrentStockQuery = {
+  productId?: ID;
+  includeInactive?: boolean;
 };
 
 export type GetCurrentStockResult = {
@@ -22,25 +25,37 @@ export type GetCurrentStockResult = {
 };
 
 export const getCurrentStock = async (
-  query: GetCurrentStockQuery = {}
+  query: GetCurrentStockQuery = {},
+  deps: { productRepo: ProductRepository; movementRepo: InventoryMovementRepository }
 ): Promise<GetCurrentStockResult> => {
   try {
-    const { productId } = query;
-    // In a real implementation, this would aggregate movements from the database
-    // For now, return empty array
-    const items: StockItem[] = [];
+    const { productId, includeInactive = false } = query;
+    const products = await deps.productRepo.findAll(includeInactive);
+    const movements = await deps.movementRepo.findAll(productId);
 
-    return {
-      items,
-      total: 0,
-      success: true,
-    };
+    const stockByProduct = new Map<ID, number>();
+    for (const m of movements) {
+      const current = stockByProduct.get(m.productId.toString()) ?? 0;
+      stockByProduct.set(m.productId.toString(), current + m.quantity);
+    }
+
+    const items: StockItem[] = products.map((p) => {
+      const productId = p.id.toString();
+      const currentStock = stockByProduct.get(productId) ?? p.currentStock.toNumber();
+      const minStock = p.minStock.toNumber();
+      return {
+        productId,
+        productName: p.name,
+        currentStock,
+        reservedStock: 0, // TODO: implement reservations
+        availableStock: Math.max(0, currentStock),
+        minStock,
+        isLowStock: currentStock <= minStock,
+      };
+    });
+
+    return { items, total: items.length, success: true };
   } catch (error: any) {
-    return {
-      items: [],
-      total: 0,
-      success: false,
-      error: error.message || "Error getting current stock",
-    };
+    return { items: [], total: 0, success: false, error: error.message || "Error obteniendo existencia" };
   }
 };
