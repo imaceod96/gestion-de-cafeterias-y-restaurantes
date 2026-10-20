@@ -121,8 +121,8 @@ export class Product {
     const now = Timestamp.now().toISOString();
     return new Product({
       ...this.toData(),
-      currentPurchasePrice: priceType === PriceType.COMPRA ? newPrice : this.currentPurchasePrice.toNumber(),
-      currentSalePrice: priceType === PriceType.VENTA ? newPrice : this.currentSalePrice.toNumber(),
+      currentPurchasePrice: priceType === "compra" ? newPrice : this.currentPurchasePrice.toNumber(),
+      currentSalePrice: priceType === "venta" ? newPrice : this.currentSalePrice.toNumber(),
       updatedAt: now,
     });
   }

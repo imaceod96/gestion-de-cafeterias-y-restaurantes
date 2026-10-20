@@ -31,7 +31,7 @@ export const changePrice = async (
       return { product: null, priceHistory: null, success: false, error: "El precio no puede ser negativo" };
     }
 
-    const oldPrice = command.priceType === PriceType.COMPRA
+    const oldPrice = command.priceType === "compra"
       ? product.currentPurchasePrice.toNumber()
       : product.currentSalePrice.toNumber();
 

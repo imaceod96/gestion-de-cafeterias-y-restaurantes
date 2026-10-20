@@ -5,7 +5,7 @@ import { InventoryMovementRepository } from "../../../inventory/application/port
 import { InventoryMovement } from "../../../inventory/domain/entities/inventory-movement";
 import { PriceHistory } from "../../../products/domain/entities/price-history";
 import { PriceHistoryRepository } from "../../../products/application/ports/price-history.repository";
-import { ID, InventoryMovementType, PriceType } from "../../../../shared/types";
+import { ID } from "../../../../shared/types";
 
 export type CreateMerchandiseEntryCommand = {
   productId: ID;
@@ -62,7 +62,7 @@ export const createMerchandiseEntry = async (
 
     const movement = InventoryMovement.create({
       productId: command.productId,
-      type: InventoryMovementType.ENTRY,
+      type: "entry",
       quantity: command.quantity,
       previousStock,
       newStock,
@@ -74,13 +74,13 @@ export const createMerchandiseEntry = async (
 
     // The purchase price of the product follows the latest entry cost.
     const oldPrice = product.currentPurchasePrice.toNumber();
-    await deps.productRepo.save(product.withStockChange(command.quantity).withUpdatedPrice(PriceType.COMPRA, command.unitCost));
+    await deps.productRepo.save(product.withStockChange(command.quantity).withUpdatedPrice("compra", command.unitCost));
 
     if (oldPrice !== command.unitCost) {
       await deps.priceHistoryRepo.save(
         PriceHistory.create({
           productId: command.productId,
-          priceType: PriceType.COMPRA,
+          priceType: "compra",
           oldPrice,
           newPrice: command.unitCost,
         })
