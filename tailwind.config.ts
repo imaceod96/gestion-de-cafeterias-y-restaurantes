@@ -62,6 +62,20 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Coffee theme colors
+        coffee: {
+          900: "#4A2C20",
+          800: "#5C3D2B",
+          700: "#6F4E36",
+          600: "#8B6B4A",
+          500: "#A8805E",
+          400: "#C4A582",
+          300: "#D9C4B0",
+          200: "#E8DCCF",
+          100: "#F3EAE2",
+        },
+        cream: "#F7F3ED",
+        caramel: "#B7793E",
       },
       borderRadius: {
         lg: "var(--radius)",

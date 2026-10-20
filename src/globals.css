@@ -4,89 +4,90 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Cafeteria Manager — Coffee identity palette
+       Café oscuro #4A2C20 · Crema #F7F3ED · Blanco cálido #FFFFFF · Caramelo #B7793E */
+    --background: 36 33% 95%;
+    --foreground: 20 33% 20%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 20 33% 20%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 20 33% 20%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 20 33% 20%;
+    --primary-foreground: 36 33% 97%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 30 30% 93%;
+    --secondary-foreground: 20 33% 20%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 32 28% 94%;
+    --muted-foreground: 24 12% 42%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 28 43% 48%;
+    --accent-foreground: 36 33% 97%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 30 22% 87%;
+    --input: 30 22% 87%;
+    --ring: 28 43% 48%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 98%;
+    --sidebar-background: 20 33% 20%;
+    --sidebar-foreground: 32 30% 92%;
+    --sidebar-primary: 28 43% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 20 28% 27%;
+    --sidebar-accent-foreground: 32 30% 92%;
+    --sidebar-border: 20 28% 27%;
+    --sidebar-ring: 28 43% 48%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Semantic status colors (informational use only) */
+    --status-success: 142 52% 34%;
+    --status-warning: 35 92% 42%;
+    --status-danger: 0 72% 45%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 20 33% 11%;
+    --foreground: 32 30% 94%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 20 30% 15%;
+    --card-foreground: 32 30% 94%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 20 30% 15%;
+    --popover-foreground: 32 30% 94%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 32 30% 94%;
+    --primary-foreground: 20 33% 15%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 20 26% 20%;
+    --secondary-foreground: 32 30% 94%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 20 26% 20%;
+    --muted-foreground: 28 16% 65%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 28 43% 52%;
+    --accent-foreground: 20 33% 12%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --border: 20 22% 24%;
+    --input: 20 22% 24%;
+    --ring: 28 43% 52%;
+
+    --sidebar-background: 20 30% 13%;
+    --sidebar-foreground: 32 30% 92%;
+    --sidebar-primary: 28 43% 52%;
+    --sidebar-primary-foreground: 20 33% 12%;
+    --sidebar-accent: 20 24% 20%;
+    --sidebar-accent-foreground: 32 30% 92%;
+    --sidebar-border: 20 22% 22%;
+    --sidebar-ring: 28 43% 52%;
   }
 }
 
@@ -96,6 +97,40 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply tracking-tight;
+  }
+}
+
+@layer components {
+  /* Warm paper texture used behind administrative surfaces */
+  .bg-paper-texture {
+    background-color: hsl(var(--background));
+    background-image:
+      radial-gradient(
+        circle at 12% 18%,
+        rgba(183, 121, 62, 0.06) 0,
+        transparent 42%
+      ),
+      radial-gradient(
+        circle at 88% 8%,
+        rgba(74, 44, 32, 0.05) 0,
+        transparent 38%
+      );
+  }
+
+  .surface-card {
+    @apply rounded-2xl border border-border/70 bg-card shadow-[0_1px_2px_rgba(74,44,32,0.04),0_8px_24px_-12px_rgba(74,44,32,0.16)];
+  }
+
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background;
   }
 }
