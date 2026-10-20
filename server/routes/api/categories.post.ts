@@ -1,7 +1,7 @@
 import { defineHandler } from "nitro";
 import { readBody, createError } from "nitro/h3";
 import { createCategory } from "@/modules/products/application/commands/create-category.command";
-import { SqliteCategoryRepository } from "@/modules/products/infrastructure/persistence/sqlite-category.repository";
+import { SqliteCategoryRepository } from "@server/infrastructure/persistence/products/category.repository";
 
 const categoryRepo = new SqliteCategoryRepository();
 

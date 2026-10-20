@@ -1,8 +1,8 @@
 import { defineHandler } from "nitro";
 import { getQuery } from "nitro/h3";
 import { getCurrentStock } from "@/modules/inventory/application/queries/get-current-stock.query";
-import { SqliteProductRepository } from "@/modules/products/infrastructure/persistence/sqlite-product.repository";
-import { SqliteInventoryMovementRepository } from "@/modules/inventory/infrastructure/persistence/sqlite-inventory-movement.repository";
+import { SqliteProductRepository } from "@server/infrastructure/persistence/products/product.repository";
+import { SqliteInventoryMovementRepository } from "@server/infrastructure/persistence/inventory/inventory-movement.repository";
 
 const productRepo = new SqliteProductRepository();
 const movementRepo = new SqliteInventoryMovementRepository();

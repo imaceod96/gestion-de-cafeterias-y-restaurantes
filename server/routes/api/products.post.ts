@@ -1,8 +1,8 @@
 import { defineHandler } from "nitro";
 import { readBody, createError } from "nitro/h3";
 import { createProduct } from "@/modules/products/application/commands/create-product.command";
-import { SqliteProductRepository } from "@/modules/products/infrastructure/persistence/sqlite-product.repository";
-import { SqliteCategoryRepository } from "@/modules/products/infrastructure/persistence/sqlite-category.repository";
+import { SqliteProductRepository } from "@server/infrastructure/persistence/products/product.repository";
+import { SqliteCategoryRepository } from "@server/infrastructure/persistence/products/category.repository";
 
 const productRepo = new SqliteProductRepository();
 const categoryRepo = new SqliteCategoryRepository();

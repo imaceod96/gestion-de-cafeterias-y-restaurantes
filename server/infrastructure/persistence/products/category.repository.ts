@@ -1,7 +1,7 @@
 import { getDatabase } from "@server/infrastructure/database/client";
-import { Category } from "../../domain/entities/category";
-import { CategoryRepository } from "../../application/ports/product.repository";
-import { ID } from "../../../../shared/types";
+import { Category } from "@/modules/products/domain/entities/category";
+import { CategoryRepository } from "@/modules/products/application/ports/product.repository";
+import { ID } from "@/shared/types";
 
 export class SqliteCategoryRepository implements CategoryRepository {
   async findAll(): Promise<Category[]> {

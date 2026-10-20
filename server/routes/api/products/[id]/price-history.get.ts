@@ -1,7 +1,7 @@
 import { defineHandler } from "nitro";
 import { getRouterParam, createError } from "nitro/h3";
 import { getPriceHistory } from "@/modules/products/application/queries/get-price-history.query";
-import { SqlitePriceHistoryRepository } from "@/modules/products/infrastructure/persistence/sqlite-price-history.repository";
+import { SqlitePriceHistoryRepository } from "@server/infrastructure/persistence/products/price-history.repository";
 
 const priceHistoryRepo = new SqlitePriceHistoryRepository();
 

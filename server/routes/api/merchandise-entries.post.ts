@@ -1,10 +1,10 @@
 import { defineHandler } from "nitro";
 import { readBody, createError } from "nitro/h3";
 import { createMerchandiseEntry } from "@/modules/warehouse/application/commands/create-merchandise-entry.command";
-import { SqliteMerchandiseEntryRepository } from "@/modules/warehouse/infrastructure/persistence/sqlite-merchandise-entry.repository";
-import { SqliteProductRepository } from "@/modules/products/infrastructure/persistence/sqlite-product.repository";
-import { SqliteInventoryMovementRepository } from "@/modules/inventory/infrastructure/persistence/sqlite-inventory-movement.repository";
-import { SqlitePriceHistoryRepository } from "@/modules/products/infrastructure/persistence/sqlite-price-history.repository";
+import { SqliteMerchandiseEntryRepository } from "@server/infrastructure/persistence/warehouse/merchandise-entry.repository";
+import { SqliteProductRepository } from "@server/infrastructure/persistence/products/product.repository";
+import { SqliteInventoryMovementRepository } from "@server/infrastructure/persistence/inventory/inventory-movement.repository";
+import { SqlitePriceHistoryRepository } from "@server/infrastructure/persistence/products/price-history.repository";
 
 const entryRepo = new SqliteMerchandiseEntryRepository();
 const productRepo = new SqliteProductRepository();
