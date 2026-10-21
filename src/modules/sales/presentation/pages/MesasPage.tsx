@@ -1,23 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { PageHeader } from "@/shared/ui/layout/PageHeader";
-import { Button } from "@/shared/ui/button";
 import { Badge } from "@/shared/ui/badge";
 import { createDeps } from "@/app/providers/composition-root";
 import { getOpenTables } from "@/modules/tables/application/queries/get-open-tables.query";
-import { CreateTableDialog } from "@/modules/tables/presentation/components/CreateTableDialog";
-import { showSuccess, showError } from "@/shared/lib/toast";
 import { UtensilsCrossed, Loader2 } from "lucide-react";
 
 const deps = createDeps();
 
 export default function MesasPage() {
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
   const { data, isLoading } = useQuery({
     queryKey: ["open-tables"],
@@ -31,16 +25,7 @@ export default function MesasPage() {
     <div className="space-y-6">
       <PageHeader
         title="Mesas"
-        description="Cuentas abiertas por mesa: crear mesa, agregar productos, cerrar y pagar."
-        actions={
-          <Button
-            onClick={() => setCreateDialogOpen(true)}
-            className="bg-caramel hover:bg-caramel/90 text-coffee-900"
-          >
-            <UtensilsCrossed className="h-4 w-4 mr-2" />
-            Nueva Mesa
-          </Button>
-        }
+        description="Cuentas abiertas por mesa: agregar productos, cerrar y pagar."
       />
 
       {isLoading ? (
@@ -74,11 +59,6 @@ export default function MesasPage() {
           ))}
         </div>
       )}
-
-      <CreateTableDialog
-        open={createDialogOpen}
-        onOpenChange={setCreateDialogOpen}
-      />
     </div>
   );
 }

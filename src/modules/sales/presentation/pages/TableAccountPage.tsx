@@ -28,47 +28,49 @@ interface CartItem {
   unitSalePrice: number;
   quantity: number;
   total: number;
+  detailId?: string;
 }
 
 export function TableAccountPage() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const params = useParams();
-  const tableId = params?.tableId ?? null;
+  const accountId = params?.accountId ?? null;
   const [searchTerm, setSearchTerm] = useState("");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [account, setAccount] = useState<any>(null);
   const [isLoadingAccount, setIsLoadingAccount] = useState(true);
 
-  // Load account when component mounts or tableId changes
+  // Load account when component mounts or accountId changes
   useEffect(() => {
-    if (tableId) {
+    if (accountId) {
       const loadAccount = async () => {
         setIsLoadingAccount(true);
         const result = await getTableAccount(
-          { accountId: tableId },
+          { accountId },
           { tableAccountRepo: deps.tableAccountRepo }
         );
         if (result.success && result.account) {
-          setAccount(result.account);
-          // Initialize cart from account details
-          setCart(
-            result.account.details.map((d: any) => ({
-              productId: d.productId,
-              productName: d.productName,
-              photoUrl: null,
-              unit: "un",
-              unitSalePrice: d.unitSalePrice,
-              quantity: d.quantity,
-              total: d.total,
-            }))
-          );
-        }
+                  setAccount(result.account);
+                  // Initialize cart from account details
+                  setCart(
+                    result.account.details.map((d: any) => ({
+                      productId: d.productId,
+                      productName: d.productName,
+                      photoUrl: null,
+                      unit: "un",
+                      unitSalePrice: d.unitSalePrice,
+                      quantity: d.quantity,
+                      total: d.total,
+                      detailId: d.id.toString(),
+                    }))
+                  );
+                }
         setIsLoadingAccount(false);
-      };
-      loadAccount();
-    }
-  }, [tableId]);
+              };
+              loadAccount();
+            }
+          }, [accountId]);
 
   const { data: productsData, isLoading: productsLoading } = useQuery({
     queryKey: ["products-for-sale"],
@@ -82,75 +84,92 @@ export function TableAccountPage() {
   );
 
   const addToCartMutation = useMutation({
-      mutationFn: ({ productId: id, quantity }: { productId: string; quantity: number }) =>
-        addTableDetail(
+        mutationFn: ({ productId: id, quantity }: { productId: string; quantity: number }) =>
+          addTableDetail(
+            {
+              accountId: accountId ?? "",
+              productId: id,
+              quantity,
+            },
+            { tableAccountRepo: deps.tableAccountRepo, productRepo: deps.productRepo }
+          ),
+        onSuccess: (_result, variables) => {
+          const id = variables?.productId;
+          if (id && _result.success && _result.account) {
+            setAccount(_result.account);
+            setCart((prev) => {
+              const existing = prev.find((item) => item.productId === id);
+              if (existing) {
+                return prev.map((item) =>
+                  item.productId === id
+                    ? { ...item, quantity: item.quantity + 1, total: (item.quantity + 1) * item.unitSalePrice }
+                    : item
+                );
+              }
+              // New item - add to cart with detailId from result
+                            return [
+                              ...prev,
+                              {
+                                productId: id,
+                                productName: _result.detail?.productName ?? "",
+                                photoUrl: null,
+                                unit: "un",
+                                unitSalePrice: _result.detail?.unitSalePrice?.toNumber() ?? 0,
+                                quantity: _result.detail?.quantity?.toNumber() ?? 1,
+                                total: _result.detail?.total?.toNumber() ?? 0,
+                                detailId: _result.detail?.id.toString(),
+                              },
+                            ];
+            });
+            queryClient.invalidateQueries({ queryKey: ["open-tables"] });
+          } else if (_result.error) {
+            showError(_result.error || "No se pudo agregar el producto");
+          }
+        },
+        onError: () => {
+          showError("Error de conexión");
+        },
+      });
+  
+    const updateQuantityMutation = useMutation({
+        mutationFn: ({ detailId, quantity }: { detailId: string; quantity: number }) =>
+          updateTableDetail(
+            { accountId: accountId ?? "", detailId, quantity },
+            { tableAccountRepo: deps.tableAccountRepo, productRepo: deps.productRepo }
+          ),
+        onSuccess: (_result, variables) => {
+          const detailId = variables?.detailId;
+          if (detailId && _result.success && _result.account) {
+            setAccount(_result.account);
+            setCart((prev) =>
+              prev.map((item) =>
+                item.detailId === detailId
+                  ? { ...item, quantity: _result.detail?.quantity?.toNumber() ?? item.quantity, total: _result.detail?.total?.toNumber() ?? item.total }
+                  : item
+              )
+            );
+            queryClient.invalidateQueries({ queryKey: ["open-tables"] });
+          } else if (_result.error) {
+            showError(_result.error || "No se pudo actualizar la cantidad");
+          }
+        },
+        onError: () => {
+          showError("Error de conexión");
+        },
+      });
+  
+    const closeMutation = useMutation({
+      mutationFn: () =>
+        closeTable(
+          { accountId: accountId ?? "" },
           {
-            accountId: tableId ?? "",
-            productId: id,
-            quantity,
-          },
-          { tableAccountRepo: deps.tableAccountRepo, productRepo: deps.productRepo }
+            tableAccountRepo: deps.tableAccountRepo,
+            saleRepo: deps.saleRepo,
+            voucherRepo: deps.voucherRepo,
+            productRepo: deps.productRepo,
+            movementRepo: deps.movementRepo,
+          }
         ),
-      onSuccess: (_result, variables) => {
-        const id = variables?.productId;
-        if (id && _result.success && _result.account) {
-          setAccount(_result.account);
-          setCart((prev) =>
-            prev.map((item) =>
-              item.productId === id
-                ? { ...item, quantity: item.quantity + 1, total: (item.quantity + 1) * item.unitSalePrice }
-                : item
-            )
-          );
-          queryClient.invalidateQueries({ queryKey: ["open-tables"] });
-        } else if (_result.error) {
-          showError(_result.error || "No se pudo agregar el producto");
-        }
-      },
-      onError: () => {
-        showError("Error de conexión");
-      },
-    });
-
-  const updateQuantityMutation = useMutation({
-      mutationFn: ({ productId: id, quantity }: { productId: string; quantity: number }) =>
-        updateTableDetail(
-          { accountId: tableId ?? "", detailId: id, quantity },
-          { tableAccountRepo: deps.tableAccountRepo, productRepo: deps.productRepo }
-        ),
-      onSuccess: (_result, variables) => {
-        const id = variables?.productId;
-        if (id && _result.success && _result.account) {
-          setAccount(_result.account);
-          setCart((prev) =>
-            prev.map((item) =>
-              item.productId === id
-                ? { ...item, quantity: _result.detail?.quantity?.toNumber() ?? item.quantity, total: _result.detail?.total?.toNumber() ?? item.total }
-                : item
-            )
-          );
-          queryClient.invalidateQueries({ queryKey: ["open-tables"] });
-        } else if (_result.error) {
-          showError(_result.error || "No se pudo actualizar la cantidad");
-        }
-      },
-      onError: () => {
-        showError("Error de conexión");
-      },
-    });
-
-  const closeMutation = useMutation({
-    mutationFn: () =>
-      closeTable(
-        { accountId: tableId ?? "" },
-        {
-          tableAccountRepo: deps.tableAccountRepo,
-          saleRepo: deps.saleRepo,
-          voucherRepo: deps.voucherRepo,
-          productRepo: deps.productRepo,
-          movementRepo: deps.movementRepo,
-        }
-      ),
     onSuccess: (result) => {
       if (result.success) {
         showSuccess("Mesa cerrada correctamente");
@@ -179,9 +198,11 @@ export function TableAccountPage() {
   };
 
   const updateQuantity = (productId: string, newQuantity: number) => {
+    const item = cart.find((i) => i.productId === productId);
+    if (!item || !item.detailId) return;
     if (newQuantity <= 0) {
-      setCart((prev) => prev.filter((item) => item.productId !== productId));
-      updateQuantityMutation.mutate({ productId, quantity: 0 });
+      setCart((prev) => prev.filter((i) => i.productId !== productId));
+      updateQuantityMutation.mutate({ detailId: item.detailId, quantity: 0 });
       return;
     }
     const product = products.find((p) => p.id.toString() === productId);
@@ -189,12 +210,14 @@ export function TableAccountPage() {
       showError("Stock insuficiente");
       return;
     }
-    updateQuantityMutation.mutate({ productId, quantity: newQuantity });
+    updateQuantityMutation.mutate({ detailId: item.detailId, quantity: newQuantity });
   };
 
   const removeFromCart = (productId: string) => {
-    setCart((prev) => prev.filter((item) => item.productId !== productId));
-    updateQuantityMutation.mutate({ productId, quantity: 0 });
+    const item = cart.find((i) => i.productId === productId);
+    if (!item || !item.detailId) return;
+    setCart((prev) => prev.filter((i) => i.productId !== productId));
+    updateQuantityMutation.mutate({ detailId: item.detailId, quantity: 0 });
   };
 
   const subtotal = cart.reduce((sum, item) => sum + item.total, 0);
