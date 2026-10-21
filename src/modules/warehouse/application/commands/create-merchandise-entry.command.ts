@@ -41,14 +41,14 @@ export const createMerchandiseEntry = async (
       return { entry: {} as MerchandiseEntry, success: false, error: "La cantidad debe ser mayor que cero" };
     }
     if (!command.unit || command.unit.trim() === "") {
-      return { entry: {} as MerchandiseEntry, success: false, error: "La unidad de medida es obligatoria" };
-    }
-    if (command.unitCost <= 0) {
-      return { entry: {} as MerchandiseEntry, success: false, error: "El costo unitario debe ser mayor que cero" };
-    }
-    if (command.unitSalePrice <= 0) {
-      return { entry: {} as MerchandiseEntry, success: false, error: "El precio de venta debe ser mayor que cero" };
-    }
+        return { entry: {} as MerchandiseEntry, success: false, error: "La unidad de medida es obligatoria" };
+      }
+      if (!command.unitCost || command.unitCost <= 0) {
+        return { entry: {} as MerchandiseEntry, success: false, error: "El costo unitario debe ser mayor que cero" };
+      }
+      if (!command.unitSalePrice || command.unitSalePrice <= 0) {
+        return { entry: {} as MerchandiseEntry, success: false, error: "El precio de venta debe ser mayor que cero" };
+      }
     if (!command.entryDate) {
       return { entry: {} as MerchandiseEntry, success: false, error: "La fecha de entrada es obligatoria" };
     }

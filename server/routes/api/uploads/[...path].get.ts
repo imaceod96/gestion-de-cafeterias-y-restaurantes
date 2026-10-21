@@ -1,7 +1,8 @@
 import { defineHandler } from "nitro";
-import { getRouterParam, createError, send } from "nitro/h3";
+import { getRouterParam, createError, sendStream } from "nitro/h3";
 import { resolve } from "node:path";
 import { existsSync } from "node:fs";
+import { createReadStream } from "node:fs";
 
 const UPLOAD_DIR = resolve(process.cwd(), "data", "uploads");
 
@@ -14,5 +15,5 @@ export default defineHandler(async (event) => {
   if (!existsSync(filePath)) {
     throw createError({ statusCode: 404, statusMessage: "File not found" });
   }
-  return send(event, filePath);
+  return sendStream(event, createReadStream(filePath));
 });
