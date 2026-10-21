@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/shared/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/shared/ui/dialog";
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
@@ -10,8 +10,12 @@ import { createTable } from "@/modules/tables/application/commands/create-table.
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { showSuccess, showError } from "@/shared/lib/toast";
 
-export function CreateTableDialog() {
-  const [open, setOpen] = useState(false);
+interface CreateTableDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export function CreateTableDialog({ open, onOpenChange }: CreateTableDialogProps) {
   const [number, setNumber] = useState("");
   const [name, setName] = useState("");
   const queryClient = useQueryClient();
@@ -20,19 +24,19 @@ export function CreateTableDialog() {
   const mutation = useMutation({
     mutationFn: () => createTable({ number: Number(number), name: name || null }, { tableRepo: deps.tableRepo }),
     onSuccess: (result) => {
-          if (result.success) {
-            showSuccess(`Mesa ${result.table?.number} creada correctamente`);
-            queryClient.invalidateQueries({ queryKey: ["open-tables"] });
-            setOpen(false);
-            setNumber("");
-            setName("");
-          } else {
-            showError(result.error || "No se pudo crear la mesa");
-          }
-        },
-        onError: () => {
-          showError("Error de conexión");
-        },
+      if (result.success) {
+        showSuccess(`Mesa ${result.table?.number} creada correctamente`);
+        queryClient.invalidateQueries({ queryKey: ["open-tables"] });
+        onOpenChange(false);
+        setNumber("");
+        setName("");
+      } else {
+        showError(result.error || "No se pudo crear la mesa");
+      }
+    },
+    onError: () => {
+      showError("Error de conexión");
+    },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -42,12 +46,7 @@ export function CreateTableDialog() {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-1">
-          <span>+ Nueva Mesa</span>
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
@@ -84,7 +83,7 @@ export function CreateTableDialog() {
             </div>
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={mutation.isPending}>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={mutation.isPending}>
               Cancelar
             </Button>
             <Button type="submit" disabled={mutation.isPending || !number}>

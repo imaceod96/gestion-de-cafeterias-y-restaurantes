@@ -1,13 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { createDeps } from "@/app/providers/composition-root";
 import { getOpenTables } from "@/modules/tables/application/queries/get-open-tables.query";
-import { Button } from "@/shared/ui/button";
-import { Plus } from "lucide-react";
 
 export function OpenTablesGrid() {
   const deps = createDeps();
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["open-tables"],
     queryFn: () => getOpenTables({ includeClosed: false }, { tableRepo: deps.tableRepo }),
     staleTime: 30000,
@@ -17,13 +15,7 @@ export function OpenTablesGrid() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-coffee-900">Mesas Abiertas</h2>
-        <Button variant="outline" size="sm" className="gap-1">
-          <Plus className="h-4 w-4" />
-          Nueva Mesa
-        </Button>
-      </div>
+      <h2 className="text-lg font-semibold text-coffee-900">Mesas Abiertas</h2>
 
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -37,10 +29,6 @@ export function OpenTablesGrid() {
       ) : tables.length === 0 ? (
         <div className="text-center py-12 text-coffee-500">
           <p className="text-sm">No hay mesas abiertas</p>
-          <Button variant="outline" size="sm" className="mt-2 gap-1">
-            <Plus className="h-4 w-4" />
-            Crear primera mesa
-          </Button>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
