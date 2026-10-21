@@ -31,11 +31,11 @@ import { getProducts } from "@/modules/products/application/queries/get-products
 import { getUnits } from "@/modules/products/application/queries/get-units.query";
 import { getCategories } from "@/modules/products/application/queries/get-categories.query";
 import { createProduct } from "@/modules/products/application/commands/create-product.command";
+import { createUnit } from "@/modules/products/application/commands/manage-unit.command";
 import { setPhoto } from "@/modules/products/application/commands/set-photo.command";
 import { createMerchandiseEntry } from "@/modules/warehouse/application/commands/create-merchandise-entry.command";
 import { Product } from "@/modules/products/domain/entities/product";
 import { Unit } from "@/modules/products/domain/entities/unit";
-import { Category } from "@/modules/products/domain/entities/category";
 import { ID } from "@/shared/types";
 
 const deps = createDeps();
@@ -46,7 +46,6 @@ export function IngresarMercanciaPage() {
   const [isProductPickerOpen, setIsProductPickerOpen] = useState(false);
   const [showNewProductForm, setShowNewProductForm] = useState(false);
   const [newProductName, setNewProductName] = useState("");
-  const [newProductCategoryId, setNewProductCategoryId] = useState("");
   const [newProductPhoto, setNewProductPhoto] = useState<File | null>(null);
   const [newProductPhotoPreview, setNewProductPhotoPreview] = useState<string | null>(null);
 
@@ -55,6 +54,11 @@ export function IngresarMercanciaPage() {
   const [unitCost, setUnitCost] = useState("");
   const [unitSalePrice, setUnitSalePrice] = useState("");
   const [entryDate, setEntryDate] = useState<Date>(new Date());
+
+  // State for creating a new unit inline
+  const [isCreatingUnit, setIsCreatingUnit] = useState(false);
+  const [newUnitName, setNewUnitName] = useState("");
+  const [newUnitAbbreviation, setNewUnitAbbreviation] = useState("");
 
   const { data: productsData } = useQuery({
     queryKey: ["products"],
@@ -133,6 +137,17 @@ export function IngresarMercanciaPage() {
     },
   });
 
+  const createUnitMutation = useMutation({
+    mutationFn: (command: { name: string; abbreviation: string }) =>
+      createUnit(command, { unitRepo: deps.unitRepo }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["units"] });
+      setIsCreatingUnit(false);
+      setNewUnitName("");
+      setNewUnitAbbreviation("");
+    },
+  });
+
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -144,8 +159,8 @@ export function IngresarMercanciaPage() {
   const handleCreateNewProduct = async () => {
     if (!newProductName.trim()) return;
 
-    const categoryId = newProductCategoryId || (categories[0]?.id.toString() ?? "");
-        const unit = selectedUnit || (units[0]?.abbreviation ?? "unid");
+    const unit = selectedUnit || (units[0]?.abbreviation ?? "unid");
+    const categoryId = categories[0]?.id.toString() ?? "";
 
     const result = await createProductMutation.mutateAsync({
       name: newProductName.trim(),
@@ -179,7 +194,6 @@ export function IngresarMercanciaPage() {
 
     setShowNewProductForm(false);
     setNewProductName("");
-    setNewProductCategoryId("");
     setNewProductPhoto(null);
     setNewProductPhotoPreview(null);
   };
@@ -279,6 +293,22 @@ export function IngresarMercanciaPage() {
     }
   };
 
+  const handleCreateUnit = async () => {
+    if (!newUnitName.trim() || !newUnitAbbreviation.trim()) return;
+    const result = await createUnitMutation.mutateAsync({
+      name: newUnitName.trim(),
+      abbreviation: newUnitAbbreviation.trim(),
+    });
+    if (result.success && result.unit) {
+      setSelectedUnit(result.unit.abbreviation);
+      setIsCreatingUnit(false);
+      setNewUnitName("");
+      setNewUnitAbbreviation("");
+    } else {
+      alert(result.error || "Error creando unidad");
+    }
+  };
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -367,96 +397,79 @@ export function IngresarMercanciaPage() {
             </Popover>
 
             {/* New Product Form */}
-                        {showNewProductForm && (
-                          <div className="mt-4 p-4 bg-coffee-50 rounded-lg border border-coffee-200 space-y-4">
-                            <h4 className="font-medium text-coffee-900">Nuevo Producto</h4>
-            
-                            <div className="space-y-2">
-                              <Label htmlFor="newProductName">Nombre del producto *</Label>
-                              <Input
-                                id="newProductName"
-                                value={newProductName}
-                                onChange={(e) => setNewProductName(e.target.value)}
-                                placeholder="Nombre del nuevo producto"
-                                required
-                              />
-                            </div>
-            
-                            <div className="space-y-2">
-                              <Label htmlFor="newProductCategory">Categoría *</Label>
-                              <Select value={newProductCategoryId} onValueChange={setNewProductCategoryId}>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Seleccionar categoría" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {categories.map((cat) => (
-                                    <SelectItem key={cat.id.toString()} value={cat.id.toString()}>
-                                      {cat.name}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </div>
-            
-                            <div className="space-y-2">
-                              <Label htmlFor="newProductPhoto">Fotografía</Label>
-                              <div className="flex items-center gap-4">
-                                <input
-                                  type="file"
-                                  id="newProductPhoto"
-                                  accept="image/*"
-                                  onChange={handlePhotoChange}
-                                  className="sr-only"
-                                />
-                                <Button
-                                  type="button"
-                                  variant="outline"
-                                  onClick={() => document.getElementById("newProductPhoto")?.click()}
-                                  className="bg-white border-coffee-200 hover:border-caramel"
-                                >
-                                  <Image className="h-4 w-4 mr-2" />
-                                  {newProductPhoto ? "Cambiar foto" : "Subir foto"}
-                                </Button>
-                                {newProductPhotoPreview && (
-                                  <div className="relative">
-                                    <img
-                                      src={newProductPhotoPreview}
-                                      alt="Preview"
-                                      className="h-16 w-16 rounded-lg object-cover border border-coffee-200"
-                                    />
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-            
-                            <div className="flex gap-2 justify-end">
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                onClick={() => {
-                                  setShowNewProductForm(false);
-                                  setNewProductName("");
-                                  setNewProductCategoryId("");
-                                  setNewProductPhoto(null);
-                                  setNewProductPhotoPreview(null);
-                                }}
-                              >
-                                Cancelar
-                              </Button>
-                              <Button
-                                type="button"
-                                onClick={handleCreateNewProduct}
-                                disabled={!newProductName.trim() || createProductMutation.isPending}
-                                className="bg-caramel hover:bg-caramel/90 text-coffee-900"
-                              >
-                                {createProductMutation.isPending ? (
-                                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                ) : null}
-                                Crear Producto
-                              </Button>
-                            </div>
-                          </div>
-                        )}
+            {showNewProductForm && (
+              <div className="mt-4 p-4 bg-coffee-50 rounded-lg border border-coffee-200 space-y-3">
+                <h4 className="font-medium text-coffee-900">Nuevo Producto</h4>
+
+                <div className="space-y-2">
+                  <Label htmlFor="newProductName">Nombre del producto *</Label>
+                  <Input
+                    id="newProductName"
+                    value={newProductName}
+                    onChange={(e) => setNewProductName(e.target.value)}
+                    placeholder="Nombre del nuevo producto"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="newProductPhoto">Fotografía</Label>
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="file"
+                      id="newProductPhoto"
+                      accept="image/*"
+                      onChange={handlePhotoChange}
+                      className="sr-only"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => document.getElementById("newProductPhoto")?.click()}
+                      className="bg-white border-coffee-200 hover:border-caramel"
+                    >
+                      <Image className="h-4 w-4 mr-2" />
+                      {newProductPhoto ? "Cambiar foto" : "Subir foto"}
+                    </Button>
+                    {newProductPhotoPreview && (
+                      <div className="relative">
+                        <img
+                          src={newProductPhotoPreview}
+                          alt="Preview"
+                          className="h-16 w-16 rounded-lg object-cover border border-coffee-200"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex gap-2 justify-end">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    onClick={() => {
+                      setShowNewProductForm(false);
+                      setNewProductName("");
+                      setNewProductPhoto(null);
+                      setNewProductPhotoPreview(null);
+                    }}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={handleCreateNewProduct}
+                    disabled={!newProductName.trim() || createProductMutation.isPending}
+                    className="bg-caramel hover:bg-caramel/90 text-coffee-900"
+                  >
+                    {createProductMutation.isPending ? (
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    ) : null}
+                    Crear Producto
+                  </Button>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -482,24 +495,81 @@ export function IngresarMercanciaPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="unit">Unidad de medida *</Label>
-                <Select value={selectedUnit} onValueChange={handleSelectUnit}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Seleccionar unidad" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {units.map((unit) => (
-                      <SelectItem key={unit.id.toString()} value={unit.abbreviation}>
-                        {unit.name} ({unit.abbreviation})
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Unit Cost */}
+                                <Select value={selectedUnit} onValueChange={handleSelectUnit}>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Seleccionar unidad" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {units.map((unit) => (
+                                      <SelectItem key={unit.id.toString()} value={unit.abbreviation}>
+                                        {unit.name} ({unit.abbreviation})
+                                      </SelectItem>
+                                    ))}
+                                    {/* "Nueva unidad" option at the end */}
+                                    <SelectItem
+                                      key="new-unit"
+                                      value="nueva-unidad"
+                                      className="border-t border-coffee-200 pt-2"
+                                    >
+                                      <div className="flex items-center gap-2">
+                                        <Package className="h-4 w-4 text-coffee-400" />
+                                        <span>Nueva unidad...</span>
+                                      </div>
+                                    </SelectItem>
+                                  </SelectContent>
+                                </Select>
+                
+                                {/* Inline new unit form (shown when "Nueva unidad" is selected) */}
+                                {selectedUnit === "nueva-unidad" && (
+                                  <div className="mt-2 p-3 bg-coffee-50 rounded border border-coffee-200 space-y-2">
+                                    <div className="space-y-2">
+                                      <Label>Nombre *</Label>
+                                      <Input
+                                        value={newUnitName}
+                                        onChange={(e) => setNewUnitName(e.target.value)}
+                                        placeholder="Ej: Unidad, Libra, Paquete"
+                                        required
+                                      />
+                                    </div>
+                                    <div className="space-y-2">
+                                      <Label>Abreviatura *</Label>
+                                      <Input
+                                        value={newUnitAbbreviation}
+                                        onChange={(e) => setNewUnitAbbreviation(e.target.value)}
+                                        placeholder="Ej: unid, lb, pqte"
+                                        required
+                                      />
+                                    </div>
+                                    <div className="flex gap-2">
+                                      <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() => setSelectedUnit(units[0]?.abbreviation ?? "unid")}
+                                        className="flex-1 text-sm"
+                                        disabled={createUnitMutation.isPending}
+                                      >
+                                        Cancelar
+                                      </Button>
+                                      <Button
+                                        type="button"
+                                        onClick={handleCreateUnit}
+                                        disabled={createUnitMutation.isPending}
+                                        className="bg-caramel hover:bg-caramel/90 text-coffee-900"
+                                      >
+                                        {createUnitMutation.isPending ? (
+                                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                        ) : null}
+                                        Crear
+                                      </Button>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                
+                        {/* Unit Cost */}
         <Card>
           <CardHeader>
             <CardTitle>Costo Unitario</CardTitle>
@@ -533,9 +603,7 @@ export function IngresarMercanciaPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <Label htmlFor="unitSalePrice">
-                Precio de venta *
-              </Label>
+              <Label htmlFor="unitSalePrice">Precio de venta *</Label>
               <Input
                 id="unitSalePrice"
                 type="number"
@@ -577,7 +645,7 @@ export function IngresarMercanciaPage() {
             <CardContent>
               <div className="text-center">
                 {totalCost !== null ? (
-                  <span className="text-2xl font-bold text-coffee-900">${totalCost}</span>
+                  <span className="text-2xl font-bold text-coffee-900">$${totalCost}</span>
                 ) : (
                   <span className="text-coffee-400">--</span>
                 )}
@@ -600,11 +668,8 @@ export function IngresarMercanciaPage() {
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
-                    variant={"outline"}
-                    className={cn(
-                      "w-full justify-start text-left font-normal",
-                      !entryDate && "text-coffee-500"
-                    )}
+                    variant="outline"
+                    className={cn("w-full justify-start text-left font-normal", !entryDate && "text-coffee-500")}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {entryDate ? format(entryDate, "dd/MM/yyyy") : <span>Seleccionar fecha</span>}
