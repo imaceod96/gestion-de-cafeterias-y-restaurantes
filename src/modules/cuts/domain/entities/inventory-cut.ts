@@ -113,21 +113,21 @@ export class InventoryCut {
   }
 
   static create(data: {
-    id?: ID;
-    date?: string;
-    status?: CutStatus;
-    details?: CutDetail[];
-    createdAt?: string;
-  }): InventoryCut {
-    const now = Timestamp.now().toISOString();
-    return new InventoryCut({
-      id: data.id ?? EntityId.generate().toString(),
-      date: data.date ?? now,
-      status: data.status ?? "pendiente",
-      details: data.details ?? [],
-      createdAt: data.createdAt ?? now,
-    });
-  }
+      id?: ID;
+      date?: string;
+      status?: CutStatus;
+      details?: CutDetail[];
+      createdAt?: string;
+    }): InventoryCut {
+      const now = Timestamp.now().toISOString();
+      return new InventoryCut({
+        id: data.id ?? EntityId.generate().toString(),
+        date: data.date ?? now,
+        status: data.status ?? "pendiente",
+        details: (data.details ?? []).map((d) => d.toData()),
+        createdAt: data.createdAt ?? now,
+      });
+    }
 
   static fromData(data: CutData): InventoryCut {
     return new InventoryCut(data);
@@ -148,9 +148,9 @@ export class InventoryCut {
   }
 
   addDetail(detail: CutDetail): InventoryCut {
-    return new InventoryCut({
-      ...this.toData(),
-      details: [...this.details, detail],
-    });
-  }
+      return new InventoryCut({
+        ...this.toData(),
+        details: [...this.details.map((d) => d.toData()), detail.toData()],
+      });
+    }
 }
