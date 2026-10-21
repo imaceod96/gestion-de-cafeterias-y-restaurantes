@@ -7,7 +7,6 @@ export type UpdateProductCommand = {
   name?: string;
   description?: string | null;
   unit?: Unit;
-  categoryId?: ID;
   currentPurchasePrice?: number;
   currentSalePrice?: number;
   minStock?: number;
@@ -32,7 +31,6 @@ export const updateProduct = async (
     const data = existing.toData();
     const updated = Product.create({
       id: existing.id.toString(),
-      categoryId: command.categoryId ?? data.categoryId,
       name: command.name ?? data.name,
       description: command.description !== undefined ? command.description : data.description,
       unit: command.unit ?? data.unit,

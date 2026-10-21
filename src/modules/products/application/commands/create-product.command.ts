@@ -1,13 +1,11 @@
 import { Product } from "../../domain/entities/product";
 import { ProductRepository } from "../ports/product.repository";
-import { CategoryRepository } from "../ports/product.repository";
 import { ID, Unit } from "../../../../shared/types";
 
 export type CreateProductCommand = {
   name: string;
   description?: string | null;
   unit: Unit;
-  categoryId: ID;
   currentPurchasePrice: number;
   currentSalePrice: number;
   currentStock?: number;
@@ -23,25 +21,17 @@ export type CreateProductResult = {
 
 export const createProduct = async (
   command: CreateProductCommand,
-  deps: { productRepo: ProductRepository; categoryRepo: CategoryRepository }
+  deps: { productRepo: ProductRepository }
 ): Promise<CreateProductResult> => {
   try {
     if (!command.name?.trim()) {
       return { product: {} as Product, success: false, error: "El nombre es obligatorio" };
-    }
-    if (!command.categoryId) {
-      return { product: {} as Product, success: false, error: "La categoría es obligatoria" };
-    }
-    const category = await deps.categoryRepo.findById(command.categoryId);
-    if (!category) {
-      return { product: {} as Product, success: false, error: "La categoría no existe" };
     }
     if (command.currentPurchasePrice < 0 || command.currentSalePrice < 0) {
       return { product: {} as Product, success: false, error: "Los precios no pueden ser negativos" };
     }
 
     const product = Product.create({
-      categoryId: command.categoryId,
       name: command.name.trim(),
       description: command.description,
       unit: command.unit,

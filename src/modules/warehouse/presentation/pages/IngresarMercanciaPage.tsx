@@ -29,7 +29,6 @@ import { cn } from "@/shared/lib/utils";
 import { createDeps } from "@/app/providers/composition-root";
 import { getProducts } from "@/modules/products/application/queries/get-products.query";
 import { getUnits } from "@/modules/products/application/queries/get-units.query";
-import { getCategories } from "@/modules/products/application/queries/get-categories.query";
 import { createUnit } from "@/modules/products/application/commands/manage-unit.command";
 import { createMerchandiseEntry } from "@/modules/warehouse/application/commands/create-merchandise-entry.command";
 import { Product } from "@/modules/products/domain/entities/product";
@@ -70,14 +69,8 @@ export function IngresarMercanciaPage() {
     queryFn: () => getUnits({ unitRepo: deps.unitRepo }),
   });
 
-  const { data: categoriesData } = useQuery({
-    queryKey: ["categories"],
-    queryFn: () => getCategories({ categoryRepo: deps.categoryRepo }),
-  });
-
   const products = productsData?.products ?? [];
   const units = unitsData?.units ?? [];
-  const categories = categoriesData?.categories ?? [];
 
   const sortedProducts = useMemo(() => {
     return [...products].sort((a, b) => a.name.localeCompare(b.name));

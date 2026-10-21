@@ -11,7 +11,7 @@ export class HttpProductRepository implements ProductRepository {
     const data = await res.json();
     return data.map ( (row: any) => Product.fromData({
       id: row.id,
-      categoryId: row.categoryId,
+      categoryId: row.categoryId ?? null,
       name: row.name,
       description: row.description,
       unit: row.unit,
@@ -33,7 +33,7 @@ export class HttpProductRepository implements ProductRepository {
     const row = await res.json();
     return Product.fromData({
       id: row.id,
-      categoryId: row.categoryId,
+      categoryId: row.categoryId ?? null,
       name: row.name,
       description: row.description,
       unit: row.unit,
@@ -56,7 +56,7 @@ export class HttpProductRepository implements ProductRepository {
     const row = data[0];
     return Product.fromData({
       id: row.id,
-      categoryId: row.categoryId,
+      categoryId: row.categoryId ?? null,
       name: row.name,
       description: row.description,
       unit: row.unit,
@@ -91,7 +91,7 @@ export class HttpProductRepository implements ProductRepository {
     const row = await res.json();
     return Product.fromData({
       id: row.id,
-      categoryId: row.categoryId,
+      categoryId: row.categoryId ?? null,
       name: row.name,
       description: row.description,
       unit: row.unit,

@@ -3,7 +3,7 @@ import { ID, Unit, PriceType } from "../../../../shared/types";
 
 export interface ProductData {
   id: ID;
-  categoryId: ID;
+  categoryId: ID | null;
   name: string;
   description: string | null;
   unit: Unit;
@@ -19,7 +19,7 @@ export interface ProductData {
 
 export class Product {
   public readonly id: EntityId;
-  public readonly categoryId: EntityId;
+  public readonly categoryId: EntityId | null;
   public readonly name: string;
   public readonly description: string | null;
   public readonly unit: Unit;
@@ -34,7 +34,7 @@ export class Product {
 
   private constructor(data: ProductData) {
     this.id = EntityId.create(data.id);
-    this.categoryId = EntityId.create(data.categoryId);
+    this.categoryId = data.categoryId ? EntityId.create(data.categoryId) : null;
     this.name = data.name;
     this.description = data.description;
     this.unit = data.unit;
@@ -50,7 +50,7 @@ export class Product {
 
   static create(data: {
     id?: ID;
-    categoryId: ID;
+    categoryId?: ID | null;
     name: string;
     description?: string | null;
     unit: Unit;
@@ -66,7 +66,7 @@ export class Product {
     const now = Timestamp.now().toISOString();
     return new Product({
       id: data.id ?? EntityId.generate().toString(),
-      categoryId: data.categoryId,
+      categoryId: data.categoryId ?? null,
       name: data.name,
       description: data.description ?? null,
       unit: data.unit,
@@ -88,7 +88,7 @@ export class Product {
   toData(): ProductData {
     return {
       id: this.id.toString(),
-      categoryId: this.categoryId.toString(),
+      categoryId: this.categoryId?.toString() ?? null,
       name: this.name,
       description: this.description,
       unit: this.unit,

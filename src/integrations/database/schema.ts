@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS units (
 
 CREATE TABLE IF NOT EXISTS products (
   id TEXT PRIMARY KEY,
-  category_id TEXT NOT NULL,
+  category_id TEXT,
   name TEXT NOT NULL,
   description TEXT,
   unit TEXT NOT NULL,
@@ -32,8 +32,7 @@ CREATE TABLE IF NOT EXISTS products (
   is_active INTEGER NOT NULL DEFAULT 1,
   photo_url TEXT,
   created_at TEXT NOT NULL,
-  updated_at TEXT NOT NULL,
-  FOREIGN KEY (category_id) REFERENCES categories (id)
+  updated_at TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS merchandise_entries (
@@ -231,22 +230,22 @@ export function createTables(db: Database): void {
   }
 
   // Insert default products if they don't exist
-  const products = db.prepare("SELECT COUNT(*) as count FROM products").get() as { count: number };
-  if (products.count === 0) {
-    const now = new Date().toISOString();
-    const stmt = db.prepare(`
-      INSERT INTO products (id, category_id, name, description, unit, current_purchase_price, current_sale_price, current_stock, min_stock, is_active, photo_url, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)
-    `);
-    const defaultProducts = [
-      ["prod-1", "cat-1", "Café", "Café recién molido", "un", 10.00, 15.00, 50, 5, null, now, now],
-      ["prod-2", "cat-2", "Jugo", "Jugo natural de naranja", "un", 8.00, 12.00, 30, 3, null, now, now],
-      ["prod-3", "cat-3", "Sandwich", "Sandwich de jamón y queso", "un", 15.00, 25.00, 20, 2, null, now, now],
-      ["prod-4", "cat-4", "Pastel", "Pastel de chocolate", "un", 5.00, 10.00, 15, 2, null, now, now],
-      ["prod-5", "cat-5", "Galletas", "Galletas de avena", "un", 3.00, 6.00, 40, 5, null, now, now],
-    ];
-    for (const p of defaultProducts) {
-      stmt.run(...p);
+    const products = db.prepare("SELECT COUNT(*) as count FROM products").get() as { count: number };
+    if (products.count === 0) {
+      const now = new Date().toISOString();
+      const stmt = db.prepare(`
+        INSERT INTO products (id, category_id, name, description, unit, current_purchase_price, current_sale_price, current_stock, min_stock, is_active, photo_url, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)
+      `);
+      const defaultProducts = [
+        ["prod-1", null, "Café", "Café recién molido", "un", 10.00, 15.00, 50, 5, null, now, now],
+        ["prod-2", null, "Jugo", "Jugo natural de naranja", "un", 8.00, 12.00, 30, 3, null, now, now],
+        ["prod-3", null, "Sandwich", "Sandwich de jamón y queso", "un", 15.00, 25.00, 20, 2, null, now, now],
+        ["prod-4", null, "Pastel", "Pastel de chocolate", "un", 5.00, 10.00, 15, 2, null, now, now],
+        ["prod-5", null, "Galletas", "Galletas de avena", "un", 3.00, 6.00, 40, 5, null, now, now],
+      ];
+      for (const p of defaultProducts) {
+        stmt.run(...p);
+      }
     }
-  }
 }

@@ -12,7 +12,7 @@ export class SqliteProductRepository implements ProductRepository {
     return rows.map((row) =>
       Product.fromData({
         id: row.id,
-        categoryId: row.category_id,
+        categoryId: row.category_id ?? null,
         name: row.name,
         description: row.description,
         unit: row.unit,
@@ -34,7 +34,7 @@ export class SqliteProductRepository implements ProductRepository {
     if (!row) return null;
     return Product.fromData({
       id: row.id,
-      categoryId: row.category_id,
+      categoryId: row.category_id ?? null,
       name: row.name,
       description: row.description,
       unit: row.unit,
@@ -55,7 +55,7 @@ export class SqliteProductRepository implements ProductRepository {
     if (!row) return null;
     return Product.fromData({
       id: row.id,
-      categoryId: row.category_id,
+      categoryId: row.category_id ?? null,
       name: row.name,
       description: row.description,
       unit: row.unit,

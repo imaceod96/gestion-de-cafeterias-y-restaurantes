@@ -6,7 +6,7 @@ export type StockItem = {
   productId: ID;
   productName: string;
   unit: string;
-  categoryId: ID;
+  categoryId: ID | null;
   categoryName: string | null;
   photoUrl: string | null;
   currentStock: number;
@@ -65,7 +65,7 @@ export const getCurrentStock = async (
         productId,
         productName: p.name,
         unit: p.unit,
-        categoryId: p.categoryId.toString(),
+        categoryId: p.categoryId?.toString() ?? null,
         categoryName: null, // Will be populated by the page if needed
         photoUrl: p.photoUrl,
         currentStock,

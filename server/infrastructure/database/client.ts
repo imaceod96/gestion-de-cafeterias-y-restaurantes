@@ -54,12 +54,38 @@ export function getDatabase(): Database.Database {
     }
   }
 
-  // Migration: add unit column to merchandise_entries if missing
-  const entryColumns = db.prepare("PRAGMA table_info(merchandise_entries)").all() as { name: string }[];
-  const entryColumnNames = entryColumns.map((c) => c.name);
-  if (entryColumnNames.length > 0 && !entryColumnNames.includes("unit")) {
-    db.exec("ALTER TABLE merchandise_entries ADD COLUMN unit TEXT NOT NULL DEFAULT 'un'");
-  }
+  // Migration: make products.category_id nullable (no longer required)
+    const productColumns = db.prepare("PRAGMA table_info(products)").all() as { name: string; notnull: number }[];
+    const categoryCol = productColumns.find((c) => c.name === "category_id");
+    if (categoryCol && categoryCol.notnull === 1) {
+      db.exec(`
+        CREATE TABLE IF NOT EXISTS products_new (
+          id TEXT PRIMARY KEY,
+          category_id TEXT,
+          name TEXT NOT NULL,
+          description TEXT,
+          unit TEXT NOT NULL,
+          current_purchase_price REAL NOT NULL DEFAULT 0,
+          current_sale_price REAL NOT NULL DEFAULT 0,
+          current_stock REAL NOT NULL DEFAULT 0,
+          min_stock REAL NOT NULL DEFAULT 0,
+          is_active INTEGER NOT NULL DEFAULT 1,
+          photo_url TEXT,
+          created_at TEXT NOT NULL,
+          updated_at TEXT NOT NULL
+        );
+      `);
+      db.exec("INSERT INTO products_new SELECT id, category_id, name, description, unit, current_purchase_price, current_sale_price, current_stock, min_stock, is_active, photo_url, created_at, updated_at FROM products");
+      db.exec("DROP TABLE products");
+      db.exec("ALTER TABLE products_new RENAME TO products");
+    }
+  
+    // Migration: add unit column to merchandise_entries if missing
+    const entryColumns = db.prepare("PRAGMA table_info(merchandise_entries)").all() as { name: string }[];
+    const entryColumnNames = entryColumns.map((c) => c.name);
+    if (entryColumnNames.length > 0 && !entryColumnNames.includes("unit")) {
+      db.exec("ALTER TABLE merchandise_entries ADD COLUMN unit TEXT NOT NULL DEFAULT 'un'");
+    }
 
   // Migration: normalize unit abbreviations to the canonical set (unid, lb, pqte)
   db.exec("UPDATE units SET abbreviation = 'unid' WHERE name = 'Unidad' AND abbreviation = 'un'");
