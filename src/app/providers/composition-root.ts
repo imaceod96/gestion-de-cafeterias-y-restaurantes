@@ -4,6 +4,7 @@ import { CategoryRepository } from "@/modules/products/application/ports/product
 import { HttpProductRepository } from "@/modules/products/infrastructure/persistence/http-product.repository";
 import { HttpCategoryRepository } from "@/modules/products/infrastructure/persistence/http-category.repository";
 import { HttpUnitRepository } from "@/modules/products/infrastructure/persistence/http-unit.repository";
+import { HttpTableRepository } from "@/modules/tables/infrastructure/persistence/http-table.repository";
 import { MerchandiseEntryRepository } from "@/modules/warehouse/application/ports/merchandise-entry.repository";
 import { HttpMerchandiseEntryRepository } from "@/modules/warehouse/infrastructure/persistence/http-merchandise-entry.repository";
 import { InventoryMovementRepository } from "@/modules/inventory/application/ports/inventory-movement.repository";
@@ -21,6 +22,7 @@ export function createDeps() {
   const productRepo = new HttpProductRepository();
   const categoryRepo = new HttpCategoryRepository();
   const unitRepo = new HttpUnitRepository();
+  const tableRepo = new HttpTableRepository();
   const merchandiseEntryRepo = new HttpMerchandiseEntryRepository();
   const movementRepo = new HttpInventoryMovementRepository();
   const priceHistoryRepo = new HttpPriceHistoryRepository();
@@ -31,6 +33,9 @@ export function createDeps() {
     productRepo,
     categoryRepo,
     unitRepo,
+
+    // Tables module
+    tableRepo,
 
     // Warehouse module
     merchandiseEntryRepo,
