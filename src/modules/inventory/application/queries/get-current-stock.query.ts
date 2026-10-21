@@ -8,11 +8,13 @@ export type StockItem = {
   unit: string;
   categoryId: ID;
   categoryName: string | null;
+  photoUrl: string | null;
   currentStock: number;
   reservedStock: number;
   availableStock: number;
   minStock: number;
   isLowStock: boolean;
+  isActive: boolean;
   availability: "disponible" | "agotado" | "desactivado";
 };
 
@@ -44,29 +46,31 @@ export const getCurrentStock = async (
     }
 
     const items: StockItem[] = products.map((p) => {
-              const productId = p.id.toString();
-              const currentStock = stockByProduct.get(productId) ?? p.currentStock.toNumber();
-              const minStock = p.minStock.toNumber();
-              const isActive = p.isActive;
-              const availability = !isActive
-                ? "desactivado"
-                : currentStock <= 0
-                ? "agotado"
-                : "disponible";
-              return {
-                productId,
-                productName: p.name,
-                unit: p.unit,
-                categoryId: p.categoryId.toString(),
-                categoryName: null, // Will be populated by the page if needed
-                currentStock,
-                reservedStock: 0, // TODO: implement reservations
-                availableStock: Math.max(0, currentStock),
-                minStock,
-                isLowStock: currentStock <= minStock,
-                availability,
-              };
-            });
+      const productId = p.id.toString();
+      const currentStock = stockByProduct.get(productId) ?? p.currentStock.toNumber();
+      const minStock = p.minStock.toNumber();
+      const isActive = p.isActive;
+      const availability = !isActive
+        ? "desactivado"
+        : currentStock <= 0
+        ? "agotado"
+        : "disponible";
+      return {
+        productId,
+        productName: p.name,
+        unit: p.unit,
+        categoryId: p.categoryId.toString(),
+        categoryName: null, // Will be populated by the page if needed
+        photoUrl: p.photoUrl,
+        currentStock,
+        reservedStock: 0, // TODO: implement reservations
+        availableStock: Math.max(0, currentStock),
+        minStock,
+        isLowStock: currentStock <= minStock,
+        isActive,
+        availability,
+      };
+    });
 
     return { items, total: items.length, success: true };
   } catch (error: any) {

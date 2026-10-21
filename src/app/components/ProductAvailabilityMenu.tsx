@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
 import { Badge } from "@/shared/ui/badge";
-import { Package, AlertTriangle, CheckCircle } from "lucide-react";
+import { Package, AlertTriangle } from "lucide-react";
 import { createDeps } from "@/app/providers/composition-root";
 import { getCurrentStock } from "@/modules/inventory/application/queries/get-current-stock.query";
 import { ProductThumbnail } from "@/shared/ui/product-thumbnail";
@@ -28,58 +28,28 @@ export function ProductAvailabilityMenu() {
 
   const items = data?.items ?? [];
 
-  const disponibles = items.filter((i) => i.availability === "disponible");
   const agotados = items.filter((i) => i.availability === "agotado");
-  const desactivados = items.filter((i) => i.availability === "desactivado");
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <button
-          className="flex items-center justify-center w-10 h-10 rounded-lg bg-coffee-100 text-coffee-700 hover:bg-coffee-200 transition-colors"
+          className="flex items-center justify-center w-10 h-10 rounded-lg bg-coffee-100 text-coffee-700 hover:bg-coffee-200 transition-colors relative"
           title="Estado de productos"
         >
           <Package className="h-5 w-5" />
+          {agotados.length > 0 && (
+            <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
+              {agotados.length}
+            </span>
+          )}
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-72 bg-white border-coffee-200">
         <div className="p-3 space-y-3 max-h-96 overflow-y-auto">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-semibold text-coffee-900">
-              DISPONIBLES
-            </h3>
-            <Badge className="bg-green-100 text-green-800">
-              {disponibles.length}
-            </Badge>
-          </div>
-          {disponibles.length === 0 ? (
-            <p className="text-xs text-coffee-500">Ningún producto disponible</p>
-          ) : (
-            <div className="space-y-1">
-              {disponibles.slice(0, 8).map((item) => (
-                <div key={item.productId} className="text-xs">
-                  <ProductThumbnail
-                    photoUrl={null}
-                    name={item.productName}
-                    unit={item.unit}
-                    size="xs"
-                  />
-                  <div className="ml-6 text-coffee-600">
-                    {item.currentStock} {item.unit}
-                  </div>
-                </div>
-              ))}
-              {disponibles.length > 8 && (
-                <p className="text-xs text-coffee-500">
-                  +{disponibles.length - 8} más
-                </p>
-              )}
-            </div>
-          )}
-
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-coffee-900">
-              AGOTADOS
+              PRODUCTOS AGOTADOS
             </h3>
             <Badge
               className={
@@ -91,57 +61,40 @@ export function ProductAvailabilityMenu() {
               {agotados.length}
             </Badge>
           </div>
-          {agotados.length === 0 ? (
-            <p className="text-xs text-coffee-500">Ningún producto agotado</p>
+          {isLoading ? (
+            <div className="text-center py-4 text-coffee-500">
+              <Package className="h-6 w-6 mx-auto mb-2 animate-pulse" />
+              Cargando...
+            </div>
+          ) : agotados.length === 0 ? (
+            <div className="text-center py-4 text-coffee-500">
+              <AlertTriangle className="h-10 w-10 mx-auto mb-2 opacity-50" />
+              <p className="text-sm">No hay productos agotados</p>
+            </div>
           ) : (
-            <div className="space-y-1">
-              {agotados.slice(0, 8).map((item) => (
-                <div key={item.productId} className="text-xs">
+            <div className="space-y-2">
+              {agotados.map((item) => (
+                <div
+                  key={item.productId}
+                  className="flex items-center gap-3 p-2 rounded-lg bg-red-50 border border-red-200"
+                >
                   <ProductThumbnail
                     photoUrl={null}
                     name={item.productName}
                     unit={item.unit}
-                    size="xs"
+                    size="sm"
                   />
-                  <div className="ml-6 text-coffee-600">
-                    {item.currentStock} {item.unit}
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-sm font-medium text-coffee-900 truncate">
+                      {item.productName}
+                    </span>
+                    <span className="text-xs text-red-600 font-medium">
+                      AGOTADO
+                    </span>
                   </div>
                 </div>
               ))}
-              {agotados.length > 8 && (
-                <p className="text-xs text-coffee-500">
-                  +{agotados.length - 8} más
-                </p>
-              )}
             </div>
-          )}
-
-          {desactivados.length > 0 && (
-            <>
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-coffee-900">
-                  DESACTIVADOS
-                </h3>
-                <Badge className="bg-gray-100 text-gray-800">
-                  {desactivados.length}
-                </Badge>
-              </div>
-              <div className="space-y-1">
-                {desactivados.slice(0, 5).map((item) => (
-                  <div key={item.productId} className="text-xs">
-                    <ProductThumbnail
-                      photoUrl={null}
-                      name={item.productName}
-                      unit={item.unit}
-                      size="xs"
-                    />
-                    <div className="ml-6 text-coffee-600">
-                      {item.currentStock} {item.unit}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </>
           )}
         </div>
       </DropdownMenuContent>

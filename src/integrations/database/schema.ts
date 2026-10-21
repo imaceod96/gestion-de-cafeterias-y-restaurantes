@@ -130,18 +130,33 @@ export function createTables(db: Database): void {
   db.exec(`
     CREATE TABLE IF NOT EXISTS tables (
       id TEXT PRIMARY KEY,
+      number INTEGER,
       name TEXT NOT NULL UNIQUE,
-      status TEXT NOT NULL DEFAULT 'free',
+      status TEXT NOT NULL DEFAULT 'libre',
+      current_account_id TEXT,
       created_at TEXT NOT NULL,
       updated_at TEXT NOT NULL
     );
   `);
 
+  // Migration: add missing columns to existing tables table
+  const tableColumns = db.prepare("PRAGMA table_info(tables)").all() as { name: string }[];
+  const tableColumnNames = tableColumns.map((c) => c.name);
+  if (!tableColumnNames.includes("number")) {
+    db.exec("ALTER TABLE tables ADD COLUMN number INTEGER");
+  }
+  if (!tableColumnNames.includes("current_account_id")) {
+    db.exec("ALTER TABLE tables ADD COLUMN current_account_id TEXT");
+  }
+  if (!tableColumnNames.includes("status")) {
+    db.exec("ALTER TABLE tables ADD COLUMN status TEXT NOT NULL DEFAULT 'libre'");
+  }
+
   db.exec(`
     CREATE TABLE IF NOT EXISTS table_accounts (
       id TEXT PRIMARY KEY,
       table_id TEXT NOT NULL,
-      status TEXT NOT NULL DEFAULT 'open',
+      status TEXT NOT NULL DEFAULT 'abierta',
       items TEXT NOT NULL DEFAULT '[]',
       subtotal REAL NOT NULL DEFAULT 0,
       tax REAL NOT NULL DEFAULT 0,

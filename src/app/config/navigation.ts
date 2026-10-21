@@ -7,6 +7,7 @@ import {
   PackagePlus,
   Receipt,
   ScanLine,
+  ShoppingCart,
   UtensilsCrossed,
   Warehouse,
 } from "lucide-react";
@@ -15,22 +16,22 @@ export const APP_NAME = "Cafetería Manager";
 export const APP_TAGLINE = "Gestión de operaciones de cafetería";
 
 /**
- * Primary navigation — the two daily actions of the business.
+ * Primary actions — the two daily operations of the business.
  * Rendered as the visual centerpiece of the home screen.
  */
 export const primaryActions = [
   {
-    key: "crear-vale",
-    label: "CREAR VALE",
-    description: "Venta inmediata",
+    key: "nueva-compra",
+    label: "NUEVA COMPRA",
+    description: "Registrar una compra de productos",
     to: "/ventas/vale",
-    icon: Receipt,
+    icon: ShoppingCart,
     tone: "caramel" as const,
   },
   {
-    key: "mesas",
-    label: "MESAS",
-    description: "Cuentas abiertas",
+    key: "mesa",
+    label: "MESA",
+    description: "Abrir o gestionar una mesa",
     to: "/mesas",
     icon: UtensilsCrossed,
     tone: "coffee" as const,
@@ -149,5 +150,30 @@ export const historyNavigation = [
         icon: UtensilsCrossed,
       },
     ],
+  },
+];
+
+/**
+ * Sidebar navigation — the permanent menu of the application.
+ * "Almacén" is a collapsible group with its three administrative entries.
+ */
+export const sidebarNavigation = [
+  {
+    key: "inicio",
+    label: "Inicio",
+    to: "/",
+    icon: LayoutGrid,
+  },
+  {
+    key: "historial-vales-mesas",
+    label: "Historial de Vales y Mesas",
+    to: "/historial",
+    icon: History,
+  },
+  {
+    key: "almacen",
+    label: "Almacén",
+    icon: Warehouse,
+    items: administrativeNavigation[0].items,
   },
 ];

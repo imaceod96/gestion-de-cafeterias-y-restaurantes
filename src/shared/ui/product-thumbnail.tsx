@@ -23,10 +23,11 @@ export function ProductThumbnail({
   size = "sm",
 }: ProductThumbnailProps) {
   const hasPhoto = photoUrl && photoUrl.trim() !== "";
+  const thumbSize = sizeClasses[size];
 
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      <div className={`rounded-lg bg-coffee-100 flex items-center justify-center overflow-hidden`}>
+      <div className={`rounded-lg bg-coffee-100 flex items-center justify-center overflow-hidden border border-coffee-200 ${thumbSize}`}>
         {hasPhoto ? (
           <img
             src={photoUrl}
