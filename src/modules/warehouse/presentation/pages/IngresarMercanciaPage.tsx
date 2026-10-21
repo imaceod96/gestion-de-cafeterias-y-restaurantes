@@ -130,39 +130,32 @@ export function IngresarMercanciaPage() {
   };
 
   const handleCreateProduct = async () => {
-    if (!newProductName.trim()) {
-      alert("El nombre del producto es obligatorio");
-      return;
-    }
-
-    const unit = selectedUnit || (units[0]?.abbreviation ?? "unid");
-    const categoryId = categories[0]?.id.toString() ?? "";
-
-    if (!categoryId) {
-      alert("No hay categorías disponibles para crear el producto");
-      return;
-    }
-
-    const cost = parseFloat(unitCost) || 0;
-    const sale = parseFloat(unitSalePrice) || 0;
-
-    try {
-      // Create the product via the API endpoint (POST)
-      const createRes = await fetch("/api/products", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: newProductName.trim(),
-          description: null,
-          unit,
-          categoryId,
-          currentPurchasePrice: cost,
-          currentSalePrice: sale,
-          currentStock: 0,
-          minStock: 0,
-          isActive: true,
-        }),
-      });
+      if (!newProductName.trim()) {
+        alert("El nombre del producto es obligatorio");
+        return;
+      }
+  
+      const unit = selectedUnit || (units[0]?.abbreviation ?? "unid");
+  
+      const cost = parseFloat(unitCost) || 0;
+      const sale = parseFloat(unitSalePrice) || 0;
+  
+      try {
+        // Create the product via the API endpoint (POST)
+        const createRes = await fetch("/api/products", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: newProductName.trim(),
+            description: null,
+            unit,
+            currentPurchasePrice: cost,
+            currentSalePrice: sale,
+            currentStock: 0,
+            minStock: 0,
+            isActive: true,
+          }),
+        });
 
       if (!createRes.ok) {
         const errorData = await createRes.json().catch(() => ({}));
@@ -239,33 +232,26 @@ export function IngresarMercanciaPage() {
     }
 
     try {
-      let productId: string;
-
-      if (isNewProduct) {
-        // Create the product first
-        const unit = selectedUnit || (units[0]?.abbreviation ?? "unid");
-        const categoryId = categories[0]?.id.toString() ?? "";
-
-        if (!categoryId) {
-          alert("No hay categorías disponibles");
-          return;
-        }
-
-        const createRes = await fetch("/api/products", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: newProductName.trim(),
-            description: null,
-            unit,
-            categoryId,
-            currentPurchasePrice: cost,
-            currentSalePrice: sale,
-            currentStock: 0,
-            minStock: 0,
-            isActive: true,
-          }),
-        });
+          let productId: string;
+    
+          if (isNewProduct) {
+            // Create the product first
+            const unit = selectedUnit || (units[0]?.abbreviation ?? "unid");
+    
+            const createRes = await fetch("/api/products", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                name: newProductName.trim(),
+                description: null,
+                unit,
+                currentPurchasePrice: cost,
+                currentSalePrice: sale,
+                currentStock: 0,
+                minStock: 0,
+                isActive: true,
+              }),
+            });
 
         if (!createRes.ok) {
           const errorData = await createRes.json().catch(() => ({}));
