@@ -2,12 +2,13 @@ import { APP_NAME, APP_TAGLINE, sidebarNavigation } from "@/app/config/navigatio
 import { Coffee, Receipt, UtensilsCrossed, Warehouse, Boxes, PackagePlus, ScanLine, ClipboardList, LayoutGrid, History } from "lucide-react";
 import { NavDropdown } from "@/shared/ui/navigation/NavDropdown";
 import { ProductAvailabilityMenu } from "@/app/components/ProductAvailabilityMenu";
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/shared/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider } from "@/shared/ui/sidebar";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-coffee-50 to-cream-50">
-      <Sidebar collapsible="none" className="w-64 shrink-0 border-r border-coffee-200 bg-white">
+      <SidebarProvider defaultOpen={true}>
+        <Sidebar collapsible="none" className="w-64 shrink-0 border-r border-coffee-200 bg-white">
         <SidebarHeader className="p-4 border-b border-coffee-200">
           <div className="w-10 h-10 bg-coffee-800 rounded-lg flex items-center justify-center mb-3">
             <Coffee className="w-6 h-6 text-white" />
@@ -52,6 +53,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       <main className="flex-1 min-w-0 bg-coffee-50">
         {children}
       </main>
+      </SidebarProvider>
     </div>
   );
 }
