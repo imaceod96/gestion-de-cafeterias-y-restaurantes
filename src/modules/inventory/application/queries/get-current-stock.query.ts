@@ -39,7 +39,13 @@ export const getCurrentStock = async (
     const products = await deps.productRepo.findAll(includeInactive);
     const movements = await deps.movementRepo.findAll(productId);
 
+    // Initialize stockByProduct with product's current stock
     const stockByProduct = new Map<ID, number>();
+    for (const p of products) {
+      stockByProduct.set(p.id.toString(), p.currentStock.toNumber());
+    }
+
+    // Apply movements to the stock
     for (const m of movements) {
       const current = stockByProduct.get(m.productId.toString()) ?? 0;
       stockByProduct.set(m.productId.toString(), current + m.quantity);

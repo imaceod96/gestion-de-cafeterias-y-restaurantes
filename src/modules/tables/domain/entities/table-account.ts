@@ -198,6 +198,20 @@ export class TableAccount {
     );
   }
 
+  replaceDetails(details: TableAccountDetail[]): TableAccount {
+    const newTotal = details.reduce((sum, d) => sum + d.total.toNumber(), 0);
+    const newTotalCost = details.reduce((sum, d) => sum + d.unitCost.toNumber() * d.quantity.toNumber(), 0);
+    return new TableAccount(
+      {
+        ...this.toData(),
+        total: newTotal,
+        totalCost: newTotalCost,
+        itemCount: details.length,
+      },
+      details
+    );
+  }
+
   close(saleId: ID): TableAccount {
     return new TableAccount(
       {

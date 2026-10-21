@@ -15,6 +15,7 @@ import VentaValePage from "@/modules/sales/presentation/pages/VentaValePage";
 import MesasPage from "@/modules/sales/presentation/pages/MesasPage";
 import HistorialValesPage from "@/modules/sales/presentation/pages/HistorialValesPage";
 import HistorialMesasPage from "@/modules/sales/presentation/pages/HistorialMesasPage";
+import TableAccountPage from "@/modules/sales/presentation/pages/TableAccountPage";
 
 const queryClient = new QueryClient();
 
@@ -28,15 +29,17 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/productos" element={<ProductsPage />} />
-                        <Route path="/productos/:id" element={<ProductDetailPage />} />
-                        <Route path="/almacen/ingresar-mercancia" element={<IngresarMercanciaPage />} />
+            <Route path="/productos/:id" element={<ProductDetailPage />} />
+            <Route path="/almacen/ingresar-mercancia" element={<IngresarMercanciaPage />} />
             <Route path="/almacen/existencia-actual" element={<ExistenciaActualPage />} />
             <Route path="/almacen/inventario" element={<InventarioPage />} />
             <Route path="/ventas/vale" element={<VentaValePage />} />
-                        <Route path="/mesas" element={<MesasPage />} />
-                        <Route path="/historial/vales" element={<HistorialValesPage />} />
-                        <Route path="/historial/mesas" element={<HistorialMesasPage />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="/mesas" element={<MesasPage />} />
+            <Route path="/historial/vales" element={<HistorialValesPage />} />
+            <Route path="/historial/mesas" element={<HistorialMesasPage />} />
+            <Route path="/mesa/:accountId" element={<TableAccountPage />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL \"*\" ROUTE */}
+
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AppLayout>
