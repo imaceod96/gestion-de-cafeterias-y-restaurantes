@@ -54,6 +54,19 @@ export function getDatabase(): Database.Database {
     }
   }
 
+  // Migration: add unit column to merchandise_entries if missing
+  const entryColumns = db.prepare("PRAGMA table_info(merchandise_entries)").all() as { name: string }[];
+  const entryColumnNames = entryColumns.map((c) => c.name);
+  if (entryColumnNames.length > 0 && !entryColumnNames.includes("unit")) {
+    db.exec("ALTER TABLE merchandise_entries ADD COLUMN unit TEXT NOT NULL DEFAULT 'un'");
+  }
+
+  // Migration: normalize unit abbreviations to the canonical set (unid, lb, pqte)
+  db.exec("UPDATE units SET abbreviation = 'unid' WHERE name = 'Unidad' AND abbreviation = 'un'");
+  db.exec("UPDATE units SET abbreviation = 'pqte' WHERE name = 'Paquete' AND abbreviation = 'paq'");
+  db.exec("UPDATE products SET unit = 'unid' WHERE unit = 'un'");
+  db.exec("UPDATE products SET unit = 'pqte' WHERE unit = 'paq'");
+
   instance = db;
   return db;
 }

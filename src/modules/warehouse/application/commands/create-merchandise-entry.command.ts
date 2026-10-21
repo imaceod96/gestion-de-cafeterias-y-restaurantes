@@ -10,6 +10,7 @@ import { ID } from "../../../../shared/types";
 export type CreateMerchandiseEntryCommand = {
   productId: ID;
   quantity: number;
+  unit: string;
   unitCost: number;
   unitSalePrice: number;
   supplier?: string | null;
@@ -39,11 +40,17 @@ export const createMerchandiseEntry = async (
     if (!command.quantity || command.quantity <= 0) {
       return { entry: {} as MerchandiseEntry, success: false, error: "La cantidad debe ser mayor que cero" };
     }
-    if (command.unitCost < 0) {
-      return { entry: {} as MerchandiseEntry, success: false, error: "El costo unitario no puede ser negativo" };
+    if (!command.unit || command.unit.trim() === "") {
+      return { entry: {} as MerchandiseEntry, success: false, error: "La unidad de medida es obligatoria" };
     }
-    if (command.unitSalePrice < 0) {
-      return { entry: {} as MerchandiseEntry, success: false, error: "El precio de venta no puede ser negativo" };
+    if (command.unitCost <= 0) {
+      return { entry: {} as MerchandiseEntry, success: false, error: "El costo unitario debe ser mayor que cero" };
+    }
+    if (command.unitSalePrice <= 0) {
+      return { entry: {} as MerchandiseEntry, success: false, error: "El precio de venta debe ser mayor que cero" };
+    }
+    if (!command.entryDate) {
+      return { entry: {} as MerchandiseEntry, success: false, error: "La fecha de entrada es obligatoria" };
     }
 
     const product = await deps.productRepo.findById(command.productId);
@@ -57,6 +64,7 @@ export const createMerchandiseEntry = async (
     const entry = MerchandiseEntry.create({
       productId: command.productId,
       quantity: command.quantity,
+      unit: command.unit,
       unitCost: command.unitCost,
       unitSalePrice: command.unitSalePrice,
       supplier: command.supplier,

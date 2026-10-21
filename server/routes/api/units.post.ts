@@ -1,7 +1,7 @@
 import { defineHandler } from "nitro";
 import { readBody, createError } from "nitro/h3";
 import { createUnit } from "@/modules/products/application/commands/manage-unit.command";
-import { SqliteUnitRepository } from "@/server/infrastructure/persistence/products/unit.repository";
+import { SqliteUnitRepository } from "@server/infrastructure/persistence/products/unit.repository";
 
 const unitRepo = new SqliteUnitRepository();
 
